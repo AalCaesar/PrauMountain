@@ -9,11 +9,11 @@
 
 - **Phase 1**: Setup & Infrastructure - 6/10 tasks
 - **Phase 2**: Database & Auth - 16/18 tasks  
-- **Phase 3**: Core Features - 0/28 tasks
+- **Phase 3**: Core Features - 4/28 tasks
 - **Phase 4**: Testing & QA - 0/8 tasks
 - **Phase 5**: Deployment - 0/6 tasks
 
-**Total Progress**: 22/70 tasks (31%)
+**Total Progress**: 26/70 tasks (37%)
 
 ---
 
@@ -70,10 +70,10 @@
 ### 3.1 Super Admin Dashboard
 
 #### Onboarding Tenant
-- [ ] Halaman daftar basecamp (list, search, filter)
-- [ ] Form tambah basecamp baru
-- [ ] Form edit profil basecamp
-- [ ] Aktifkan/nonaktifkan basecamp
+- [x] Halaman daftar basecamp (list, search, filter)
+- [x] Form tambah basecamp baru
+- [x] Form edit profil basecamp
+- [x] Aktifkan/nonaktifkan basecamp
 - [ ] Form buat admin basecamp + kirim email credentials
 
 #### Monitoring & Analytics
