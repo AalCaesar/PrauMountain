@@ -26,7 +26,7 @@ async function getActiveBasecamps(): Promise<BasecampWithPrice[]> {
       nama_basecamp,
       lokasi,
       status_buka,
-      foto,  // <--- Tambahkan baris ini di sini
+      foto,
       jalur_pendakian(harga_per_orang, is_active)
     `)
     .eq('status_buka', true);
@@ -76,7 +76,7 @@ export default async function Home() {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2000&q=80"
+            src="https://images.unsplash.com/photo-1697444267811-6344d510f179?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Mountain Background"
             fill
             className="object-cover"
