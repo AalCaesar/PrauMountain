@@ -9,17 +9,13 @@ interface AssignAdminModalProps {
   isOpen: boolean;
   onClose: () => void;
   basecamp: Basecamp | null;
+  admins: { id: string; nama_lengkap: string | null; email: string }[];
 }
 
-export default function AssignAdminModal({ isOpen, onClose, basecamp }: AssignAdminModalProps) {
+export default function AssignAdminModal({ isOpen, onClose, basecamp, admins }: AssignAdminModalProps) {
   const [adminId, setAdminId] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const validateUUID = (uuid: string): boolean => {
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    return uuidRegex.test(uuid);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,13 +23,8 @@ export default function AssignAdminModal({ isOpen, onClose, basecamp }: AssignAd
 
     if (!basecamp) return;
 
-    if (!adminId.trim()) {
-      setError('Admin ID wajib diisi');
-      return;
-    }
-
-    if (!validateUUID(adminId.trim())) {
-      setError('Format UUID tidak valid. Contoh: 123e4567-e89b-12d3-a456-426614174000');
+    if (!adminId) {
+      setError('Silakan pilih admin basecamp');
       return;
     }
 
@@ -113,23 +104,30 @@ export default function AssignAdminModal({ isOpen, onClose, basecamp }: AssignAd
                 htmlFor="admin_id"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Admin ID (UUID) <span className="text-red-500">*</span>
+                Pilih Admin Basecamp <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
+              <select
                 id="admin_id"
                 name="admin_id"
                 value={adminId}
-                onChange={handleChange}
+                onChange={(e) => setAdminId(e.target.value)}
                 disabled={isSubmitting}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 disabled:bg-gray-100 disabled:cursor-not-allowed font-mono text-sm ${
+                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 disabled:bg-gray-100 disabled:cursor-not-allowed ${
                   error ? 'border-red-500' : 'border-gray-300'
                 }`}
-                placeholder="123e4567-e89b-12d3-a456-426614174000"
-              />
-              <p className="mt-1 text-xs text-gray-500">
-                Masukkan UUID dari user dengan role admin_basecamp
-              </p>
+              >
+                <option value="">Pilih Admin Basecamp...</option>
+                {admins.map((admin) => (
+                  <option key={admin.id} value={admin.id}>
+                    {admin.nama_lengkap || admin.email}
+                  </option>
+                ))}
+              </select>
+              {admins.length === 0 && (
+                <p className="mt-1 text-xs text-amber-600">
+                  Belum ada admin basecamp terdaftar. Buat admin baru terlebih dahulu.
+                </p>
+              )}
             </div>
 
             <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">

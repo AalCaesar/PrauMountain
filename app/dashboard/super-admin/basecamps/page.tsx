@@ -11,6 +11,12 @@ export default async function BasecampsPage() {
     .select('*')
     .order('created_at', { ascending: false });
 
+  const { data: admins, error: adminsError } = await supabase
+    .from('users')
+    .select('id, nama_lengkap, email')
+    .eq('role', 'admin_basecamp')
+    .order('nama_lengkap', { ascending: true });
+
   if (error) {
     console.error('Error fetching basecamps:', error);
     return (
@@ -37,7 +43,10 @@ export default async function BasecampsPage() {
       </div>
 
       <div className="bg-white rounded-lg shadow">
-        <BasecampTable basecamps={basecamps as Basecamp[]} />
+        <BasecampTable
+          basecamps={basecamps as Basecamp[]}
+          admins={admins || []}
+        />
       </div>
     </div>
   );

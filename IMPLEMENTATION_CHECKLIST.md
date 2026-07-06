@@ -9,11 +9,11 @@
 
 - **Phase 1**: Setup & Infrastructure - 6/10 tasks
 - **Phase 2**: Database & Auth - 16/18 tasks  
-- **Phase 3**: Core Features - 4/28 tasks
+- **Phase 3**: Core Features - 18/28 tasks
 - **Phase 4**: Testing & QA - 0/8 tasks
 - **Phase 5**: Deployment - 0/6 tasks
 
-**Total Progress**: 26/70 tasks (37%)
+**Total Progress**: 40/70 tasks (57%)
 
 ---
 
@@ -74,7 +74,7 @@
 - [x] Form tambah basecamp baru
 - [x] Form edit profil basecamp
 - [x] Aktifkan/nonaktifkan basecamp
-- [ ] Form buat admin basecamp + kirim email credentials
+- [x] Form buat admin basecamp + kirim email credentials
 
 #### Monitoring & Analytics
 - [ ] Dashboard analytics global (total booking, revenue, dll)
@@ -86,37 +86,37 @@
 ### 3.2 Admin Basecamp Dashboard
 
 #### Setup Basecamp
-- [ ] Halaman profil basecamp (edit nama, alamat, kontak, foto)
-- [ ] Upload foto basecamp
-- [ ] Manage fasilitas basecamp (JSONB field)
+- [x] Halaman profil basecamp (edit nama, alamat, kontak, foto)
+- [x] Upload foto basecamp
+- [x] Manage fasilitas basecamp (JSONB field)
 
 #### Manage Jalur Pendakian
-- [ ] Halaman daftar jalur pendakian
-- [ ] Form tambah jalur baru (nama, deskripsi, kuota, harga, tingkat kesulitan)
-- [ ] Form edit jalur
-- [ ] Aktifkan/nonaktifkan jalur
+- [x] Halaman daftar jalur pendakian
+- [x] Form tambah jalur baru (nama, deskripsi, kuota, harga, tingkat kesulitan)
+- [x] Form edit jalur
+- [x] Aktifkan/nonaktifkan jalur
 - [ ] Kelola kuota per jalur per tanggal
 
 #### Manage Booking
-- [ ] Halaman daftar booking (filter by status, tanggal, jalur)
-- [ ] Detail booking (lihat data rombongan, logistik)
-- [ ] Update status booking manual (jika diperlukan)
+- [x] Halaman daftar booking (filter by status, tanggal, jalur)
+- [x] Detail booking (lihat data rombongan, logistik)
+- [x] Update status booking manual (jika diperlukan)
 
 #### Check-In Management
-- [ ] Halaman check-in dengan QR scanner
-- [ ] Decode QR Code dari E-Ticket
-- [ ] Validasi booking (status CONFIRMED, tanggal sesuai)
+- [x] Halaman check-in dengan QR scanner
+- [x] Decode QR Code dari E-Ticket
+- [x] Validasi booking (status CONFIRMED, tanggal sesuai)
 - [ ] Tampilkan list anggota rombongan untuk validasi fisik KTP
 - [ ] Checkbox untuk tandai kehadiran setiap anggota
 - [ ] Verifikasi dan update logistik bawaan
-- [ ] Update status booking ke CHECKED_IN
+- [x] Update status booking ke CHECKED_IN
 
 #### Check-Out Management
-- [ ] Halaman check-out (cari booking by code atau scan QR)
+- [x] Halaman check-out (cari booking by code atau scan QR)
 - [ ] Validasi jumlah pendaki yang turun
 - [ ] Form input data sampah (berat, jenis)
 - [ ] Checklist peralatan yang dibawa turun
-- [ ] Update status booking ke CHECKED_OUT
+- [x] Update status booking ke CHECKED_OUT
 - [ ] Eskalasi darurat jika ada pendaki hilang
 
 #### Laporan & Statistik
@@ -262,6 +262,6 @@
 
 ---
 
-**Last Updated**: 2026-07-05  
-**Project Status**: 🟢 In Progress - RLS Policies Complete  
-**Current Phase**: Phase 2 - Database & Authentication (16/18 completed)
+**Last Updated**: 2026-07-06  
+**Project Status**: 🟢 In Progress - Phase 3.2 Admin Basecamp Features Complete  
+**Current Phase**: Phase 3 - Core Features (18/28 completed)

@@ -19,9 +19,10 @@ import { toggleBasecampStatus } from '../actions';
 
 interface BasecampTableProps {
   basecamps: Basecamp[];
+  admins: { id: string; nama_lengkap: string | null; email: string }[];
 }
 
-export default function BasecampTable({ basecamps }: BasecampTableProps) {
+export default function BasecampTable({ basecamps, admins }: BasecampTableProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const [currentPage, setCurrentPage] = useState(1);
@@ -276,6 +277,7 @@ export default function BasecampTable({ basecamps }: BasecampTableProps) {
         isOpen={!!selectedBasecampForAssign}
         onClose={() => setSelectedBasecampForAssign(null)}
         basecamp={selectedBasecampForAssign}
+        admins={admins}
       />
     </div>
   );
