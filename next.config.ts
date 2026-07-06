@@ -5,8 +5,16 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'fexoyvcwbignzctklehd.supabase.co',
+        hostname: 'fexoyvcwbignzctklehd.supabase.co', // Ini biarkan saja (untuk foto profil admin)
+        port: '',
+        pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com', // Ini tambahan baru untuk gambar pemandangan
+        port: '',
+        pathname: '/**',
+      }
     ],
   },
 };
