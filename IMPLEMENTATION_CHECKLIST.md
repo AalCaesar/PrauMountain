@@ -9,11 +9,11 @@
 
 - **Phase 1**: Setup & Infrastructure - 6/10 tasks
 - **Phase 2**: Database & Auth - 16/18 tasks  
-- **Phase 3**: Core Features - 18/28 tasks
+- **Phase 3**: Core Features - 27/28 tasks
 - **Phase 4**: Testing & QA - 0/8 tasks
 - **Phase 5**: Deployment - 0/6 tasks
 
-**Total Progress**: 40/70 tasks (57%)
+**Total Progress**: 49/70 tasks (70%)
 
 ---
 
@@ -130,21 +130,21 @@
 ### 3.3 Pendaki (End User) Interface
 
 #### Landing Page & Browsing
-- [ ] Landing page dengan daftar basecamp
+- [x] Landing page dengan daftar basecamp
 - [ ] Filter basecamp (lokasi, fasilitas, rating)
-- [ ] Halaman detail basecamp
-- [ ] Daftar jalur pendakian per basecamp
-- [ ] Detail jalur (deskripsi, harga, kuota tersisa, tingkat kesulitan)
+- [x] Halaman detail basecamp
+- [x] Daftar jalur pendakian per basecamp
+- [x] Detail jalur (deskripsi, harga, kuota tersisa, tingkat kesulitan)
 
 #### Booking Flow
-- [ ] Form pilih tanggal pendakian
+- [x] Form pilih tanggal pendakian
 - [ ] Cek ketersediaan kuota realtime
-- [ ] Form input jumlah anggota
-- [ ] Form input data anggota rombongan (nama, NIK, telepon, alamat)
-- [ ] Validasi NIK 16 digit
-- [ ] Form input logistik bawaan (tenda, carrier, makanan, dll)
-- [ ] Halaman review & konfirmasi booking
-- [ ] Hitung total harga otomatis (harga * jumlah anggota)
+- [x] Form input jumlah anggota
+- [x] Form input data anggota rombongan (nama, NIK, telepon, alamat)
+- [x] Validasi NIK 16 digit
+- [x] Form input logistik bawaan (tenda, carrier, makanan, dll)
+- [x] Halaman review & konfirmasi booking
+- [x] Hitung total harga otomatis (harga * jumlah anggota)
 
 #### Payment Integration
 - [ ] Integrasi payment gateway (Midtrans/Xendit/dll)
