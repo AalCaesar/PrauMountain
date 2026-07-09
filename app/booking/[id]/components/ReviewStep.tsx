@@ -39,6 +39,7 @@ interface ReviewStepProps {
   logistics: LogistikState;
   onBack: () => void;
   onConfirm: () => void;
+  isSubmitting?: boolean;
 }
 
 const logistikLabels: Record<keyof LogistikState, string> = {
@@ -60,6 +61,7 @@ export default function ReviewStep({
   logistics,
   onBack,
   onConfirm,
+  isSubmitting = false,
 }: ReviewStepProps) {
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('id-ID', {
@@ -197,17 +199,34 @@ export default function ReviewStep({
         <button
           type="button"
           onClick={onBack}
-          className="px-6 py-3 bg-white text-gray-700 border-2 border-gray-300 rounded-xl hover:bg-gray-50 transition-colors font-medium"
+          disabled={isSubmitting}
+          className={`px-6 py-3 bg-white text-gray-700 border-2 border-gray-300 rounded-xl transition-colors font-medium ${
+            isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'
+          }`}
         >
           Kembali
         </button>
         <button
           type="button"
           onClick={onConfirm}
-          className="px-8 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-xl hover:from-emerald-700 hover:to-emerald-800 transition-all font-bold shadow-lg hover:shadow-xl flex items-center gap-2"
+          disabled={isSubmitting}
+          className={`px-8 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-xl transition-all font-bold shadow-lg flex items-center gap-2 ${
+            isSubmitting
+              ? 'opacity-75 cursor-not-allowed'
+              : 'hover:from-emerald-700 hover:to-emerald-800 hover:shadow-xl'
+          }`}
         >
-          <CheckCircle className="h-5 w-5" />
-          Konfirmasi & Bayar
+          {isSubmitting ? (
+            <>
+              <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              Memproses Booking...
+            </>
+          ) : (
+            <>
+              <CheckCircle className="h-5 w-5" />
+              Konfirmasi & Bayar
+            </>
+          )}
         </button>
       </div>
     </div>
