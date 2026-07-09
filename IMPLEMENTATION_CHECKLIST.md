@@ -171,7 +171,7 @@
 - [x] Payment button component dengan Snap popup
 - [x] Handle success/pending/error callbacks (client-side)
 - [x] Handle payment webhook callback (server-side auto-update status)
-- [ ] Generate E-Ticket dengan QR Code (requires qrcode library)
+- [x] Generate E-Ticket dengan QR Code (requires qrcode library)
 - [ ] Kirim email konfirmasi + E-Ticket PDF (requires email service)
 
 **✅ STATUS**: **Midtrans Snap FULLY INTEGRATED (85% complete)**

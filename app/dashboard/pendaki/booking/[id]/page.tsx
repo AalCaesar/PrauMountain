@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server';
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
 import PaymentButton from './components/PaymentButton';
+import TicketGenerator from './components/TicketGenerator';
 import {
   Calendar,
   CreditCard,
@@ -90,7 +91,7 @@ async function getBookingDetail(bookingId: string, userId: string): Promise<Book
     return null;
   }
 
-  return booking as BookingDetail;
+  return booking as any;
 }
 
 function getStatusBadge(status: string) {
@@ -390,6 +391,23 @@ export default async function BookingDetailPage({
                 bookingCode={booking.kode_booking}
               />
             )}
+
+            {/* E-Ticket Download */}
+            {(booking.status_booking === 'CONFIRMED' ||
+              booking.status_booking === 'CHECKED_IN' ||
+              booking.status_booking === 'CHECKED_OUT') && (
+                <TicketGenerator
+                  bookingData={{
+                    bookingCode: booking.kode_booking,
+                    leaderName: booking.anggota_rombongan[0]?.nama_anggota || 'N/A',
+                    totalMembers: booking.total_anggota,
+                    hikingDate: booking.tanggal_naik,
+                    pathName: booking.jalur_pendakian.nama_jalur,
+                    mountainName: booking.jalur_pendakian.basecamps.nama_gunung,
+                    basecampName: booking.jalur_pendakian.basecamps.nama_basecamp,
+                  }}
+                />
+              )}
           </div>
         </div>
       </div>
