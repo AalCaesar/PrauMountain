@@ -291,13 +291,13 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
     <form onSubmit={handleSubmit}>
       <Stepper currentStep={currentStep} steps={steps} />
 
-      <div className="lg:grid lg:grid-cols-3 lg:gap-8">
-        <div className="lg:col-span-2">
+      <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="lg:col-span-2 order-2 lg:order-1">
           {/* Step 1: Data Pendaki */}
           {currentStep === 1 && (
             <div className="space-y-8">
               {/* Date Picker */}
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 md:p-6">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-2 bg-emerald-50 rounded-lg">
                     <Calendar className="h-5 w-5 text-emerald-600" />
@@ -322,7 +322,7 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
                         setErrors(newErrors);
                       }
                     }}
-                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${errors.hikingDate ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full min-h-[44px] px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${errors.hikingDate ? 'border-red-500' : 'border-gray-300'
                       }`}
                   />
                   {errors.hikingDate && (
@@ -335,7 +335,7 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
               </div>
 
               {/* Hiker Count */}
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 md:p-6">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-2 bg-emerald-50 rounded-lg">
                     <Users className="h-5 w-5 text-emerald-600" />
@@ -347,7 +347,7 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
                   <button
                     type="button"
                     onClick={() => setHikerCount(Math.max(1, hikerCount - 1))}
-                    className="p-3 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="min-h-[44px] min-w-[44px] p-3 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={hikerCount <= 1}
                   >
                     <ChevronDown className="h-5 w-5 text-gray-700" />
@@ -359,7 +359,7 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
                   <button
                     type="button"
                     onClick={() => setHikerCount(hikerCount + 1)}
-                    className="p-3 bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-colors"
+                    className="min-h-[44px] min-w-[44px] p-3 bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-colors"
                   >
                     <ChevronUp className="h-5 w-5 text-white" />
                   </button>
@@ -376,7 +376,7 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
                 </div>
 
                 {hikerDetails.map((hiker, index) => (
-                  <div key={index} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+                  <div key={index} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 md:p-6">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold text-gray-900">
                         Pendaki {index + 1}
@@ -397,7 +397,7 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
                           value={hiker.namaLengkap}
                           onChange={(e) => handleHikerDetailChange(index, 'namaLengkap', e.target.value)}
                           placeholder="Masukkan nama lengkap"
-                          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${errors[`nama_${index}`] ? 'border-red-500' : 'border-gray-300'
+                          className={`w-full min-h-[44px] px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${errors[`nama_${index}`] ? 'border-red-500' : 'border-gray-300'
                             }`}
                         />
                         {errors[`nama_${index}`] && (
@@ -419,7 +419,7 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
                           }}
                           placeholder="Masukkan 16 digit NIK"
                           maxLength={16}
-                          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-mono ${errors[`nik_${index}`] ? 'border-red-500' : 'border-gray-300'
+                          className={`w-full min-h-[44px] px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-mono ${errors[`nik_${index}`] ? 'border-red-500' : 'border-gray-300'
                             }`}
                         />
                         {errors[`nik_${index}`] && (
@@ -440,7 +440,7 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
                           value={hiker.nomorTelepon}
                           onChange={(e) => handleHikerDetailChange(index, 'nomorTelepon', e.target.value)}
                           placeholder="Contoh: 08123456789"
-                          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${errors[`telp_${index}`] ? 'border-red-500' : 'border-gray-300'
+                          className={`w-full min-h-[44px] px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${errors[`telp_${index}`] ? 'border-red-500' : 'border-gray-300'
                             }`}
                         />
                         {errors[`telp_${index}`] && (
@@ -482,8 +482,8 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
 
         {/* Order Summary */}
         {currentStep === 1 && (
-          <div className="lg:col-span-1">
-            <div className="lg:sticky lg:top-24 bg-white rounded-2xl border-2 border-emerald-500 shadow-lg p-6 space-y-4">
+          <div className="lg:col-span-1 order-1 lg:order-2">
+            <div className="lg:sticky lg:top-24 bg-white rounded-2xl border-2 border-emerald-500 shadow-lg p-4 md:p-6 space-y-4">
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-2 bg-emerald-50 rounded-lg">
                   <CreditCard className="h-5 w-5 text-emerald-600" />
@@ -494,11 +494,11 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
               <div className="space-y-3 text-sm">
                 <div>
                   <p className="text-gray-500">Gunung</p>
-                  <p className="font-semibold text-gray-900">{basecamp.nama_gunung}</p>
+                  <p className="font-semibold text-gray-900 break-words">{basecamp.nama_gunung}</p>
                 </div>
                 <div>
                   <p className="text-gray-500">Jalur</p>
-                  <p className="font-semibold text-gray-900">{trail.nama_jalur}</p>
+                  <p className="font-semibold text-gray-900 break-words">{trail.nama_jalur}</p>
                 </div>
                 <div>
                   <p className="text-gray-500">Tanggal Pendakian</p>
@@ -517,17 +517,17 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
               <div className="border-t border-gray-200 pt-4 space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500">Harga per orang</span>
-                  <span className="font-medium text-gray-900">{formatPrice(trail.harga_per_orang)}</span>
+                  <span className="font-medium text-gray-900 break-words">{formatPrice(trail.harga_per_orang)}</span>
                 </div>
                 <div className="flex justify-between items-center pt-2">
                   <span className="text-lg font-bold text-gray-900">Total</span>
-                  <span className="text-2xl font-bold text-emerald-600">{formatPrice(totalPrice)}</span>
+                  <span className="text-xl sm:text-2xl font-bold text-emerald-600 break-words">{formatPrice(totalPrice)}</span>
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-colors shadow-lg hover:shadow-xl"
+                className="w-full min-h-[44px] py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-colors shadow-lg hover:shadow-xl"
               >
                 Lanjut ke Logistik
               </button>

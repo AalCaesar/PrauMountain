@@ -95,7 +95,7 @@ export default function LogistikStep({ logistics, onChange, onNext, onBack }: Lo
           return (
             <div
               key={item.key}
-              className="bg-white rounded-2xl border-2 border-gray-200 hover:border-emerald-300 transition-all shadow-sm hover:shadow-md p-6"
+              className="bg-white rounded-2xl border-2 border-gray-200 hover:border-emerald-300 transition-all shadow-sm hover:shadow-md p-4 md:p-6"
             >
               {/* Item Header */}
               <div className="flex items-start gap-4 mb-4">
@@ -114,7 +114,7 @@ export default function LogistikStep({ logistics, onChange, onNext, onBack }: Lo
                   type="button"
                   onClick={() => handleQuantityChange(item.key, -1)}
                   disabled={quantity === 0}
-                  className="p-2 bg-white hover:bg-gray-100 disabled:bg-gray-50 disabled:cursor-not-allowed rounded-lg border border-gray-200 transition-colors disabled:opacity-50"
+                  className="min-h-[44px] min-w-[44px] p-2 bg-white hover:bg-gray-100 disabled:bg-gray-50 disabled:cursor-not-allowed rounded-lg border border-gray-200 transition-colors disabled:opacity-50"
                 >
                   <Minus className="h-4 w-4 text-gray-700" />
                 </button>
@@ -127,7 +127,7 @@ export default function LogistikStep({ logistics, onChange, onNext, onBack }: Lo
                 <button
                   type="button"
                   onClick={() => handleQuantityChange(item.key, 1)}
-                  className="p-2 bg-emerald-600 hover:bg-emerald-700 rounded-lg border border-emerald-600 transition-colors"
+                  className="min-h-[44px] min-w-[44px] p-2 bg-emerald-600 hover:bg-emerald-700 rounded-lg border border-emerald-600 transition-colors"
                 >
                   <Plus className="h-4 w-4 text-white" />
                 </button>
@@ -138,18 +138,18 @@ export default function LogistikStep({ logistics, onChange, onNext, onBack }: Lo
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex items-center justify-between pt-6 border-t border-gray-200">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-200">
         <button
           type="button"
           onClick={onBack}
-          className="px-6 py-3 bg-white text-gray-700 border-2 border-gray-300 rounded-xl hover:bg-gray-50 transition-colors font-medium"
+          className="w-full sm:w-auto min-h-[44px] px-6 py-3 bg-white text-gray-700 border-2 border-gray-300 rounded-xl hover:bg-gray-50 transition-colors font-medium"
         >
           Kembali
         </button>
         <button
           type="button"
           onClick={onNext}
-          className="px-8 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors font-semibold shadow-lg hover:shadow-xl"
+          className="w-full sm:w-auto min-h-[44px] px-8 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors font-semibold shadow-lg hover:shadow-xl"
         >
           Lanjut ke Review
         </button>

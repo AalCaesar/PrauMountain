@@ -94,25 +94,25 @@ export default function ReviewStep({
       </div>
 
       {/* Trail & Date Info */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 md:p-6">
         <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
           <MapPin className="h-5 w-5 text-emerald-600" />
           Informasi Jalur
         </h3>
         <div className="space-y-3">
-          <div className="flex justify-between">
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
             <span className="text-gray-600">Gunung</span>
-            <span className="font-semibold text-gray-900">{basecamp.nama_gunung}</span>
+            <span className="font-semibold text-gray-900 break-words">{basecamp.nama_gunung}</span>
           </div>
-          <div className="flex justify-between">
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
             <span className="text-gray-600">Basecamp</span>
-            <span className="font-semibold text-gray-900">{basecamp.nama_basecamp}</span>
+            <span className="font-semibold text-gray-900 break-words">{basecamp.nama_basecamp}</span>
           </div>
-          <div className="flex justify-between">
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
             <span className="text-gray-600">Jalur</span>
-            <span className="font-semibold text-gray-900">{trail.nama_jalur}</span>
+            <span className="font-semibold text-gray-900 break-words">{trail.nama_jalur}</span>
           </div>
-          <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 pt-3 border-t border-gray-100">
             <span className="text-gray-600 flex items-center gap-2">
               <Calendar className="h-4 w-4" />
               Tanggal Pendakian
@@ -123,7 +123,7 @@ export default function ReviewStep({
       </div>
 
       {/* Hikers List */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 md:p-6">
         <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
           <Users className="h-5 w-5 text-emerald-600" />
           Data Pendaki ({hikerCount} Orang)
@@ -132,7 +132,7 @@ export default function ReviewStep({
           {hikerDetails.map((hiker, index) => (
             <div key={index} className="p-4 bg-gray-50 rounded-xl">
               <div className="flex items-start justify-between mb-2">
-                <h4 className="font-semibold text-gray-900">
+                <h4 className="font-semibold text-gray-900 break-words">
                   {hiker.namaLengkap}
                   {index === 0 && (
                     <span className="ml-2 text-xs font-normal text-emerald-600">(Ketua)</span>
@@ -140,13 +140,13 @@ export default function ReviewStep({
                 </h4>
               </div>
               <div className="space-y-1 text-sm">
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                   <span className="text-gray-500">NIK</span>
-                  <span className="font-mono text-gray-700">{hiker.nik}</span>
+                  <span className="font-mono text-gray-700 break-all">{hiker.nik}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                   <span className="text-gray-500">Telepon</span>
-                  <span className="text-gray-700">{hiker.nomorTelepon}</span>
+                  <span className="text-gray-700 break-words">{hiker.nomorTelepon}</span>
                 </div>
               </div>
             </div>
@@ -156,7 +156,7 @@ export default function ReviewStep({
 
       {/* Logistics List */}
       {logistikWithQty.length > 0 && (
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 md:p-6">
           <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
             <Package className="h-5 w-5 text-emerald-600" />
             Logistik Bawaan
@@ -164,8 +164,8 @@ export default function ReviewStep({
           <div className="space-y-2">
             {logistikWithQty.map(([key, qty]) => (
               <div key={key} className="flex justify-between items-center py-2">
-                <span className="text-gray-700">{logistikLabels[key as keyof LogistikState]}</span>
-                <span className="font-semibold text-gray-900">{qty} unit</span>
+                <span className="text-gray-700 break-words">{logistikLabels[key as keyof LogistikState]}</span>
+                <span className="font-semibold text-gray-900 flex-shrink-0 ml-2">{qty} unit</span>
               </div>
             ))}
           </div>
@@ -173,7 +173,7 @@ export default function ReviewStep({
       )}
 
       {/* Price Summary */}
-      <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl border-2 border-emerald-500 shadow-lg p-6">
+      <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl border-2 border-emerald-500 shadow-lg p-4 md:p-6">
         <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
           <CreditCard className="h-5 w-5 text-emerald-600" />
           Ringkasan Biaya
@@ -181,26 +181,26 @@ export default function ReviewStep({
         <div className="space-y-3">
           <div className="flex justify-between text-sm">
             <span className="text-gray-700">Harga per orang</span>
-            <span className="font-medium text-gray-900">{formatPrice(trail.harga_per_orang)}</span>
+            <span className="font-medium text-gray-900 break-words">{formatPrice(trail.harga_per_orang)}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-700">Jumlah pendaki</span>
             <span className="font-medium text-gray-900">{hikerCount} orang</span>
           </div>
-          <div className="border-t-2 border-emerald-300 pt-3 flex justify-between items-center">
-            <span className="text-xl font-bold text-gray-900">Total Pembayaran</span>
-            <span className="text-3xl font-bold text-emerald-600">{formatPrice(totalPrice)}</span>
+          <div className="border-t-2 border-emerald-300 pt-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+            <span className="text-lg sm:text-xl font-bold text-gray-900">Total Pembayaran</span>
+            <span className="text-2xl sm:text-3xl font-bold text-emerald-600 break-words">{formatPrice(totalPrice)}</span>
           </div>
         </div>
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex items-center justify-between pt-6 border-t border-gray-200">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-200">
         <button
           type="button"
           onClick={onBack}
           disabled={isSubmitting}
-          className={`px-6 py-3 bg-white text-gray-700 border-2 border-gray-300 rounded-xl transition-colors font-medium ${
+          className={`w-full sm:w-auto min-h-[44px] px-6 py-3 bg-white text-gray-700 border-2 border-gray-300 rounded-xl transition-colors font-medium ${
             isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'
           }`}
         >
@@ -210,7 +210,7 @@ export default function ReviewStep({
           type="button"
           onClick={onConfirm}
           disabled={isSubmitting}
-          className={`px-8 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-xl transition-all font-bold shadow-lg flex items-center gap-2 ${
+          className={`w-full sm:w-auto min-h-[44px] px-8 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-xl transition-all font-bold shadow-lg flex items-center justify-center gap-2 ${
             isSubmitting
               ? 'opacity-75 cursor-not-allowed'
               : 'hover:from-emerald-700 hover:to-emerald-800 hover:shadow-xl'

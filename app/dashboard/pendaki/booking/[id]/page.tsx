@@ -195,7 +195,7 @@ export default async function BookingDetailPage({
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
           <Link
             href="/dashboard/pendaki"
             className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition-colors"
@@ -203,9 +203,9 @@ export default async function BookingDetailPage({
             <ArrowLeft className="h-5 w-5" />
             Kembali ke Dashboard
           </Link>
-          <div className="flex items-start justify-between">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Detail Booking</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Detail Booking</h1>
               <p className="text-gray-600">Informasi lengkap tentang booking Anda</p>
             </div>
             {getStatusBadge(booking.status_booking)}
@@ -216,17 +216,17 @@ export default async function BookingDetailPage({
       {/* Main Content */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Booking Code Card */}
-        <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-2xl shadow-lg p-8 mb-8 text-white">
-          <div className="flex items-center justify-between">
-            <div>
+        <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-2xl shadow-lg p-4 md:p-8 mb-8 text-white">
+          <div className="flex items-center justify-between gap-4">
+            <div className="min-w-0 flex-1">
               <p className="text-emerald-100 text-sm font-medium mb-2">Kode Booking</p>
-              <p className="text-4xl font-bold font-mono">{booking.kode_booking}</p>
+              <p className="text-2xl sm:text-4xl font-bold font-mono break-all">{booking.kode_booking}</p>
               <p className="text-emerald-100 text-sm mt-2">
                 Dibuat pada {formatDate(booking.created_at)}
               </p>
             </div>
-            <div className="p-4 bg-white/20 rounded-xl backdrop-blur-sm">
-              <Ticket className="h-12 w-12" />
+            <div className="p-3 md:p-4 bg-white/20 rounded-xl backdrop-blur-sm flex-shrink-0">
+              <Ticket className="h-8 w-8 md:h-12 md:w-12" />
             </div>
           </div>
         </div>
@@ -235,7 +235,7 @@ export default async function BookingDetailPage({
           {/* Left Column - Main Info */}
           <div className="lg:col-span-2 space-y-6">
             {/* Mountain & Trail Info */}
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 md:p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <Mountain className="h-6 w-6 text-emerald-600" />
                 Informasi Jalur Pendakian
@@ -247,16 +247,16 @@ export default async function BookingDetailPage({
                     {booking.jalur_pendakian.basecamps.nama_gunung}
                   </p>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col md:grid md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Basecamp</p>
-                    <p className="font-semibold text-gray-900">
+                    <p className="font-semibold text-gray-900 break-words">
                       {booking.jalur_pendakian.basecamps.nama_basecamp}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Jalur</p>
-                    <p className="font-semibold text-gray-900">
+                    <p className="font-semibold text-gray-900 break-words">
                       {booking.jalur_pendakian.nama_jalur}
                     </p>
                   </div>
@@ -284,7 +284,7 @@ export default async function BookingDetailPage({
             </div>
 
             {/* Hikers List */}
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 md:p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <Users className="h-6 w-6 text-emerald-600" />
                 Anggota Rombongan ({booking.total_anggota} Orang)
@@ -297,8 +297,8 @@ export default async function BookingDetailPage({
                         <div className="p-2 bg-emerald-100 rounded-lg">
                           <User className="h-5 w-5 text-emerald-600" />
                         </div>
-                        <div>
-                          <h3 className="font-semibold text-gray-900">
+                        <div className="min-w-0 flex-1">
+                          <h3 className="font-semibold text-gray-900 break-words">
                             {anggota.nama_anggota}
                           </h3>
                           {index === 0 && (
@@ -309,14 +309,14 @@ export default async function BookingDetailPage({
                         </div>
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4 text-sm">
                       <div>
                         <p className="text-gray-600 mb-1">NIK</p>
-                        <p className="font-mono font-semibold text-gray-900">{anggota.nik}</p>
+                        <p className="font-mono font-semibold text-gray-900 break-all">{anggota.nik}</p>
                       </div>
                       <div>
                         <p className="text-gray-600 mb-1">Kontak Darurat</p>
-                        <p className="font-semibold text-gray-900">{anggota.kontak_darurat}</p>
+                        <p className="font-semibold text-gray-900 break-words">{anggota.kontak_darurat}</p>
                       </div>
                     </div>
                   </div>
@@ -326,16 +326,16 @@ export default async function BookingDetailPage({
 
             {/* Logistics */}
             {booking.logistik_bawaan.length > 0 && (
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 md:p-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                   <Package className="h-6 w-6 text-emerald-600" />
                   Logistik Bawaan
                 </h2>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {booking.logistik_bawaan.map((item, index) => (
                     <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <span className="text-gray-700">{item.nama_barang}</span>
-                      <span className="font-semibold text-gray-900">{item.jumlah_dibawa} unit</span>
+                      <span className="text-gray-700 break-words">{item.nama_barang}</span>
+                      <span className="font-semibold text-gray-900 flex-shrink-0 ml-2">{item.jumlah_dibawa} unit</span>
                     </div>
                   ))}
                 </div>
@@ -346,7 +346,7 @@ export default async function BookingDetailPage({
           {/* Right Column - Summary */}
           <div className="space-y-6">
             {/* Date Info */}
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 md:p-6">
               <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <Calendar className="h-5 w-5 text-emerald-600" />
                 Jadwal Pendakian
@@ -364,7 +364,7 @@ export default async function BookingDetailPage({
             </div>
 
             {/* Payment Info */}
-            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl border-2 border-emerald-500 shadow-lg p-6">
+            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl border-2 border-emerald-500 shadow-lg p-4 md:p-6">
               <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <CreditCard className="h-5 w-5 text-emerald-600" />
                 Rincian Biaya
@@ -376,7 +376,7 @@ export default async function BookingDetailPage({
                 </div>
                 <div className="border-t-2 border-emerald-300 pt-3 flex justify-between items-center">
                   <span className="text-lg font-bold text-gray-900">Total</span>
-                  <span className="text-2xl font-bold text-emerald-600">
+                  <span className="text-xl sm:text-2xl font-bold text-emerald-600 break-words">
                     {formatPrice(booking.total_biaya)}
                   </span>
                 </div>

@@ -85,7 +85,7 @@ export default function PaymentButton({ bookingId, bookingCode }: PaymentButtonP
   };
 
   return (
-    <div className="bg-amber-50 rounded-2xl border border-amber-300 shadow-sm p-6">
+    <div className="bg-amber-50 rounded-2xl border border-amber-300 shadow-sm p-4 md:p-6">
       <h3 className="font-bold text-amber-900 mb-2 flex items-center gap-2">
         <Clock className="h-5 w-5" />
         Menunggu Pembayaran
@@ -96,7 +96,7 @@ export default function PaymentButton({ bookingId, bookingCode }: PaymentButtonP
       <button
         onClick={handlePayment}
         disabled={isLoading || !snapLoaded}
-        className={`w-full px-4 py-3 rounded-xl font-semibold transition-colors ${
+        className={`w-full min-h-[44px] px-4 py-3 rounded-xl font-semibold transition-colors ${
           isLoading || !snapLoaded
             ? 'bg-gray-400 cursor-not-allowed'
             : 'bg-amber-600 hover:bg-amber-700 text-white'
@@ -104,8 +104,8 @@ export default function PaymentButton({ bookingId, bookingCode }: PaymentButtonP
       >
         {isLoading ? 'Memproses...' : !snapLoaded ? 'Memuat...' : 'Bayar Sekarang'}
       </button>
-      <p className="text-xs text-gray-500 mt-3 text-center">
-        Kode Booking: <span className="font-mono font-semibold">{bookingCode}</span>
+      <p className="text-xs text-gray-500 mt-3 text-center break-words">
+        Kode Booking: <span className="font-mono font-semibold break-all">{bookingCode}</span>
       </p>
     </div>
   );

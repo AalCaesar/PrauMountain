@@ -200,8 +200,8 @@
 ### 3.4 State Machine & Business Logic
 
 #### Status Transitions
-- [ ] Implementasi transisi DRAFT → PENDING_PAYMENT
-- [ ] Implementasi transisi PENDING_PAYMENT → CONFIRMED (webhook)
+- [x] Implementasi transisi DRAFT → PENDING_PAYMENT
+- [x] Implementasi transisi PENDING_PAYMENT → CONFIRMED (webhook)
 - [ ] Implementasi transisi PENDING_PAYMENT → EXPIRED (cron job)
 - [ ] Implementasi transisi CONFIRMED → CHECKED_IN
 - [ ] Implementasi transisi CHECKED_IN → CHECKED_OUT

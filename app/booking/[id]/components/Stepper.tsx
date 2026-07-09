@@ -15,7 +15,7 @@ interface StepperProps {
 
 export default function Stepper({ currentStep, steps }: StepperProps) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-8">
+    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 md:p-6 mb-6 md:mb-8">
       <div className="flex items-center justify-between relative">
         {steps.map((step, index) => {
           const Icon = step.icon;
@@ -28,7 +28,7 @@ export default function Stepper({ currentStep, steps }: StepperProps) {
               {/* Connector Line */}
               {index < steps.length - 1 && (
                 <div
-                  className={`absolute top-6 left-1/2 w-full h-0.5 -z-10 transition-colors duration-300 ${
+                  className={`absolute top-5 sm:top-6 left-1/2 w-full h-0.5 -z-10 transition-colors duration-300 ${
                     isCompleted ? 'bg-emerald-500' : 'bg-gray-200'
                   }`}
                   style={{ transform: 'translateY(-50%)' }}
@@ -37,7 +37,7 @@ export default function Stepper({ currentStep, steps }: StepperProps) {
 
               {/* Step Circle */}
               <div
-                className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
+                className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
                   isCompleted
                     ? 'bg-emerald-500 text-white shadow-lg'
                     : isCurrent
@@ -46,16 +46,16 @@ export default function Stepper({ currentStep, steps }: StepperProps) {
                 }`}
               >
                 {isCompleted ? (
-                  <Check className="h-6 w-6" />
+                  <Check className="h-5 w-5 sm:h-6 sm:w-6" />
                 ) : (
-                  <Icon className="h-6 w-6" />
+                  <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                 )}
               </div>
 
               {/* Step Label */}
-              <div className="mt-3 text-center">
+              <div className="mt-2 sm:mt-3 text-center px-1">
                 <p
-                  className={`text-sm font-semibold transition-colors ${
+                  className={`text-xs sm:text-sm font-semibold transition-colors ${
                     isCurrent
                       ? 'text-emerald-600'
                       : isCompleted
@@ -63,10 +63,11 @@ export default function Stepper({ currentStep, steps }: StepperProps) {
                       : 'text-gray-400'
                   }`}
                 >
-                  {step.title}
+                  <span className="hidden sm:inline">{step.title}</span>
+                  <span className="sm:hidden">{step.number}</span>
                 </p>
                 <p
-                  className={`text-xs mt-1 ${
+                  className={`hidden sm:block text-xs mt-1 ${
                     isCurrent ? 'text-emerald-600' : 'text-gray-400'
                   }`}
                 >
