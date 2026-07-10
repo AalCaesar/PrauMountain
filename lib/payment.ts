@@ -1,6 +1,5 @@
 'use client';
 
-// Declare Midtrans Snap on window object
 declare global {
   interface Window {
     snap?: {
@@ -22,9 +21,6 @@ export interface PaymentResponse {
   redirect_url: string;
 }
 
-/**
- * Initialize Midtrans Snap payment for a booking
- */
 export async function initiatePayment(bookingId: string): Promise<PaymentResponse> {
   const response = await fetch('/api/payment/create-transaction', {
     method: 'POST',
@@ -42,9 +38,7 @@ export async function initiatePayment(bookingId: string): Promise<PaymentRespons
   return response.json();
 }
 
-/**
- * Process payment using Midtrans Snap
- */
+
 export function processSnapPayment(
   token: string,
   callbacks?: {

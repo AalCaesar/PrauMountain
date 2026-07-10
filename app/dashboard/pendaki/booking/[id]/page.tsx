@@ -1,5 +1,8 @@
-import { createClient } from '@/utils/supabase/server';
-import { redirect, notFound } from 'next/navigation';
+'use client';
+
+import { createClient } from '@/utils/supabase/client';
+import { useRouter, useSearchParams, notFound } from 'next/navigation';
+import { useState, useEffect, useCallback, use } from 'react';
 import Link from 'next/link';
 import PaymentButton from './components/PaymentButton';
 import TicketGenerator from './components/TicketGenerator';
@@ -19,6 +22,17 @@ import {
   Ticket,
 } from 'lucide-react';
 
+interface Trail {
+  nama_jalur: string;
+  deskripsi: string | null;
+  tingkat_kesulitan: string | null;
+  basecamps: {
+    nama_gunung: string;
+    nama_basecamp: string;
+    lokasi: string;
+  };
+}
+
 interface BookingDetail {
   id: string;
   kode_booking: string;
@@ -28,16 +42,7 @@ interface BookingDetail {
   total_biaya: number;
   status_booking: string;
   created_at: string;
-  jalur_pendakian: {
-    nama_jalur: string;
-    deskripsi: string;
-    tingkat_kesulitan: string;
-    basecamps: {
-      nama_gunung: string;
-      nama_basecamp: string;
-      lokasi: string;
-    };
-  };
+  jalur_pendakian: Trail;
   anggota_rombongan: Array<{
     nama_anggota: string;
     nik: string;
@@ -49,8 +54,8 @@ interface BookingDetail {
   }>;
 }
 
-async function getBookingDetail(bookingId: string, userId: string): Promise<BookingDetail | null> {
-  const supabase = await createClient();
+async function getBookingDetail(bookingId: string): Promise<BookingDetail | null> {
+  const supabase = createClient();
 
   const { data: booking, error } = await supabase
     .from('bookings')
@@ -84,14 +89,18 @@ async function getBookingDetail(bookingId: string, userId: string): Promise<Book
       )
     `)
     .eq('id', bookingId)
-    .eq('user_id', userId)
     .single();
 
-  if (error || !booking) {
+  if (error) {
+    console.error("🚨 REAL SUPABASE ERROR:", error);
     return null;
   }
 
-  return booking as any;
+  if (!booking) {
+    return null;
+  }
+
+  return booking as unknown as BookingDetail;
 }
 
 function getStatusBadge(status: string) {
@@ -155,7 +164,7 @@ function formatDate(dateString: string) {
   });
 }
 
-function getDifficultyBadge(difficulty: string) {
+function getDifficultyBadge(difficulty: string | null) {
   const difficultyConfig: Record<string, { label: string; color: string }> = {
     'mudah': { label: 'Mudah', color: 'bg-green-100 text-green-700 border-green-300' },
     'sedang': { label: 'Sedang', color: 'bg-yellow-100 text-yellow-700 border-yellow-300' },
@@ -163,7 +172,7 @@ function getDifficultyBadge(difficulty: string) {
     'ekstrem': { label: 'Ekstrem', color: 'bg-red-100 text-red-700 border-red-300' },
   };
 
-  const config = difficultyConfig[difficulty] || difficultyConfig['sedang'];
+  const config = difficultyConfig[difficulty || ''] || difficultyConfig['sedang'];
 
   return (
     <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${config.color}`}>
@@ -172,25 +181,58 @@ function getDifficultyBadge(difficulty: string) {
   );
 }
 
-export default async function BookingDetailPage({
+export default function BookingDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
-  const supabase = await createClient();
+  const { id } = use(params);
+  const [booking, setBooking] = useState<BookingDetail | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const isPaymentSuccess = searchParams.get('payment') === 'success';
 
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
+  useEffect(() => {
+    (async () => {
+      const bookingData = await getBookingDetail(id);
+      if (!bookingData) {
+        console.error('Failed to fetch booking for ID:', id);
+        notFound();
+      }
+      setBooking(bookingData);
+      setIsLoading(false);
+    })();
+  }, [id]);
 
-  if (userError || !user) {
-    redirect('/login');
-  }
+  // Sync effect
+  useEffect(() => {
+    if (isPaymentSuccess && booking && booking.status_booking === 'PENDING_PAYMENT') {
+      (async () => {
+        setIsSyncing(true);
+        try {
+          const response = await fetch('/api/payment/sync-status', {
+            method: 'POST',
+            body: JSON.stringify({ booking_id: booking.id }),
+            headers: { 'Content-Type': 'application/json' },
+          });
+          if (response.ok) {
+            setBooking(prev => prev ? { ...prev, status_booking: 'CONFIRMED' } : null);
+            router.replace(`/dashboard/pendaki/booking/${booking.id}`);
+            router.refresh();
+          }
+        } catch (error) {
+          console.error('Sync failed:', error);
+        } finally {
+          setIsSyncing(false);
+        }
+      })();
+    }
+  }, [isPaymentSuccess, booking, router]);
 
-  const booking = await getBookingDetail(id, user.id);
-
-  if (!booking) {
-    notFound();
-  }
+  if (isLoading) return <div>Loading...</div>;
+  if (!booking) return null; // notFound() called in useEffect
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-gray-50">
@@ -209,7 +251,7 @@ export default async function BookingDetailPage({
               <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Detail Booking</h1>
               <p className="text-gray-600">Informasi lengkap tentang booking Anda</p>
             </div>
-            {getStatusBadge(booking.status_booking)}
+            {isSyncing ? <span>Memverifikasi pembayaran...</span> : getStatusBadge(booking.status_booking)}
           </div>
         </div>
       </div>

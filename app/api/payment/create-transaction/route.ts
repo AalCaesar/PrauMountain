@@ -26,30 +26,13 @@ export async function POST(request: NextRequest) {
 
     const { data: booking, error: bookingError } = await supabase
       .from('bookings')
-      .select(`
-        id,
-        kode_booking,
-        total_biaya,
-        total_anggota,
-        status_booking,
-        jalur_pendakian!jalur_id (
-          nama_jalur,
-          basecamps!basecamp_id (
-            nama_gunung
-          )
-        ),
-        pemesan:users!user_id (
-          email,
-          nama_lengkap,
-          nomor_hp
-        )
-      `)
-      .or(`id.eq.${booking_id},kode_booking.eq.${booking_id}`)
+      .select('id, kode_booking, total_biaya, status_booking, user_id')
+      .eq('id', booking_id)
       .eq('user_id', user.id)
       .single();
 
     if (bookingError || !booking) {
-      console.error("Supabase Error:", bookingError);
+      console.error("🔴 DETAIL ERROR SUPABASE:", bookingError);
       return NextResponse.json(
         { error: 'Booking not found' },
         { status: 404 }
@@ -69,30 +52,28 @@ export async function POST(request: NextRequest) {
       clientKey: process.env.MIDTRANS_CLIENT_KEY,
     });
 
-    const b: any = booking;
-
     const parameter = {
       transaction_details: {
-        order_id: b.kode_booking,
-        gross_amount: Math.round(Number(b.total_biaya)),
+        order_id: booking.kode_booking,
+        gross_amount: Math.round(Number(booking.total_biaya)),
       },
       item_details: [
         {
           id: 'tiket_pendakian',
-          price: Math.round(Number(b.total_biaya)),
+          price: Math.round(Number(booking.total_biaya)),
           quantity: 1,
-          name: `Tiket Booking: ${b.kode_booking}`.substring(0, 50),
+          name: `Tiket Booking: ${booking.kode_booking}`.substring(0, 50),
         },
       ],
       customer_details: {
-        first_name: b.pemesan?.nama_lengkap || 'Pendaki',
-        email: b.pemesan?.email || 'email@contoh.com',
-        phone: b.pemesan?.nomor_hp || '08123456789',
+        first_name: 'Pendaki',
+        email: user.email || 'email@contoh.com',
+        phone: '080000000000',
       },
       callbacks: {
-        finish: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/dashboard/pendaki/booking/${booking_id}?payment=success`,
-        error: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/dashboard/pendaki/booking/${booking_id}?payment=error`,
-        pending: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/dashboard/pendaki/booking/${booking_id}?payment=pending`,
+        finish: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/dashboard/pendaki/booking/${booking_id}?payment=success`,
+        error: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/dashboard/pendaki/booking/${booking_id}?payment=error`,
+        pending: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/dashboard/pendaki/booking/${booking_id}?payment=pending`,
       },
     };
 

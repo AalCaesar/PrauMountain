@@ -44,6 +44,10 @@ export interface Booking {
   payment_method: string | null;
   paid_at: string | null;
   payment_expired_at: string | null;
+  midtrans_snap_token: string | null;
+  midtrans_transaction_id: string | null;
+  payment_initiated_at: string | null;
+  snap_token_expires_at: string | null;
   checked_in_at: string | null;
   checked_in_by: string | null;
   checked_out_at: string | null;
