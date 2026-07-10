@@ -3,6 +3,7 @@ import { getMyBasecamp } from './actions';
 import BasecampInfoForm from './components/BasecampInfoForm';
 import FasilitasManager from './components/FasilitasManager';
 import PhotoUploader from './components/PhotoUploader';
+export const dynamic = 'force-dynamic';
 
 export default async function SettingsPage() {
   const result = await getMyBasecamp();
