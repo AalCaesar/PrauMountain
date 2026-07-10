@@ -126,7 +126,7 @@ export async function signIn(formData: {
 /**
  * Server Action untuk Logout
  */
-export async function signOut(): Promise<ActionResponse> {
+export async function logout(): Promise<ActionResponse> {
   const supabase = await createClient();
 
   const { error } = await supabase.auth.signOut();
