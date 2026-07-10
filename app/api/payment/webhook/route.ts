@@ -21,10 +21,7 @@ interface MidtransNotification {
   currency: string;
 }
 
-/**
- * Verify Midtrans signature for security
- * Formula: SHA512(order_id + status_code + gross_amount + server_key)
- */
+// Verify Midtrans signature for security
 function verifySignature(
   orderId: string,
   statusCode: string,
@@ -37,11 +34,10 @@ function verifySignature(
   return hash === signatureKey;
 }
 
-/**
- * Generate HTML email template for booking confirmation
- */
+
+//Generate HTML email template for booking confirmation
 function generateConfirmationEmail(bookingCode: string, bookingId: string): string {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://prau-mountain.vercel.app/';
   const ticketUrl = `${baseUrl}/dashboard/pendaki/booking/${bookingId}`;
 
   return `
@@ -118,10 +114,7 @@ function generateConfirmationEmail(bookingCode: string, bookingId: string): stri
   `.trim();
 }
 
-/**
- * Midtrans Webhook Handler
- * Receives payment notifications and updates booking status
- */
+// Receives payment notifications and updates booking status
 export async function POST(request: NextRequest) {
   try {
     console.log('--- WEBHOOK REQUEST RECEIVED ---');
