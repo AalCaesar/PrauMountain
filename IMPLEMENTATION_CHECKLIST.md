@@ -182,12 +182,12 @@
 - **Webhook handler at `app/api/payment/webhook/route.ts` (AUTO-CONFIRMS PAYMENT!)**
 - Credentials configured in `.env.local`
 - ✅ **Payment flow working end-to-end with auto-confirmation**
-- ❌ **NOT STARTED**: E-Ticket generation & email notifications
+- ❌ **NOT STARTED**: email notifications
 
 #### User Dashboard
 - [x] Halaman riwayat booking
 - [x] Detail booking (status, booking code, tanggal, harga, anggota, logistik)
-- [ ] Download E-Ticket PDF (requires E-Ticket generation first)
+- [x] Download E-Ticket PDF (requires E-Ticket generation first)
 - [ ] Batalkan booking (sesuai policy refund)
 
 **✅ STATUS**: **Dashboard lengkap dengan detail booking**. 
