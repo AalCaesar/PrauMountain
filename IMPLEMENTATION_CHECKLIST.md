@@ -9,11 +9,11 @@
 
 - **Phase 1**: Setup & Infrastructure - 8/10 tasks (80%)
 - **Phase 2**: Database & Auth - 16/18 tasks (89%)
-- **Phase 3**: Core Features - 34/36 tasks (94%) ✅ *Booking, payment w/webhook, & dashboard DONE*
+- **Phase 3**: Core Features - 36/36 tasks (100%) ✅ *Booking, payment, E-Ticket & Email DONE*
 - **Phase 4**: Testing & QA - 0/8 tasks (0%)
 - **Phase 5**: Deployment - 0/6 tasks (0%)
 
-**Total Progress**: 58/72 tasks (81%)
+**Total Progress**: 60/72 tasks (83%)
 
 ✅ **CORE FLOW FULLY WORKING**: Booking creation, payment integration WITH auto-confirmation, dan user dashboard berfungsi end-to-end!
 
@@ -172,7 +172,7 @@
 - [x] Handle success/pending/error callbacks (client-side)
 - [x] Handle payment webhook callback (server-side auto-update status)
 - [x] Generate E-Ticket dengan QR Code (requires qrcode library)
-- [ ] Kirim email konfirmasi + E-Ticket PDF (requires email service)
+- [x] Kirim email konfirmasi + E-Ticket PDF (requires email service)
 
 **✅ STATUS**: **Midtrans Snap FULLY INTEGRATED (85% complete)**
 - `midtrans-client` package installed
@@ -217,7 +217,7 @@
 #### Email Notifications
 - [ ] Email welcome untuk admin basecamp baru
 - [ ] Email payment link untuk pendaki
-- [ ] Email konfirmasi booking + E-Ticket
+- [x] Email konfirmasi booking + E-Ticket
 - [ ] Email reminder H-1 pendakian
 - [ ] Email thank you + request feedback setelah checkout
 - [ ] Email pembatalan booking

@@ -76,7 +76,7 @@ async function getUserBookings(userId: string): Promise<Booking[]> {
     return [];
   }
 
-  return (bookings as Booking[]) || [];
+  return (bookings as any) || [];
 }
 
 function getStatusBadge(status: string) {
