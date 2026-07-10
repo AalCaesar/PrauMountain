@@ -37,7 +37,7 @@ function verifySignature(
 
 //Generate HTML email template for booking confirmation
 function generateConfirmationEmail(bookingCode: string, bookingId: string): string {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://prau-mountain.vercel.app/';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://prau-mountain.vercel.app';
   const ticketUrl = `${baseUrl}/dashboard/pendaki/booking/${bookingId}`;
 
   return `
