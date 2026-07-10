@@ -2,58 +2,46 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Mountain, Menu, X, LogIn, UserPlus, LayoutDashboard, LogOut } from 'lucide-react';
+import { getCurrentUser } from '@/app/actions/auth'; // Import fungsi auth aslimu
 
 export default function DynamicNavbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // State baru untuk mengecek status login user
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const pathname = usePathname();
+
+  // LOGIKA BARU: Jika BUKAN di halaman utama ('/'), Navbar otomatis pakai desain gelap (teks hitam)
+  const isHomePage = pathname === '/';
+  const shouldBeSolid = !isHomePage || isScrolled;
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Mengecek session login Supabase lewat LocalStorage
+  // LOGIKA BARU: Cek login 100% akurat langsung dari server action Supabase-mu
   useEffect(() => {
-    const checkLoginStatus = () => {
-      const keys = Object.keys(localStorage);
-      // Supabase biasanya menyimpan sesi dengan format nama 'sb-[project-ref]-auth-token'
-      const hasSupabaseToken = keys.some(key => key.startsWith('sb-') && key.endsWith('-auth-token'));
-      setIsLoggedIn(hasSupabaseToken);
+    const checkLoginStatus = async () => {
+      try {
+        const user = await getCurrentUser();
+        setIsLoggedIn(!!user); // Jika user ada, set jadi true
+      } catch (error) {
+        setIsLoggedIn(false);
+      }
     };
 
     checkLoginStatus();
-
-    // Memantau jika ada perubahan status login dari tab lain
-    window.addEventListener('storage', checkLoginStatus);
-    return () => window.removeEventListener('storage', checkLoginStatus);
-  }, []);
-
-  const handleLogout = () => {
-    // Menghapus session Supabase dari LocalStorage
-    const keys = Object.keys(localStorage);
-    keys.forEach(key => {
-      if (key.startsWith('sb-') && key.endsWith('-auth-token')) {
-        localStorage.removeItem(key);
-      }
-    });
-
-    setIsLoggedIn(false);
-
-    // Redirect / Refresh ke halaman utama setelah logout
-    window.location.href = '/';
-  };
+  }, [pathname]);
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${shouldBeSolid
           ? 'bg-white/90 backdrop-blur-md shadow-md'
           : 'bg-transparent'
         }`}
@@ -63,11 +51,11 @@ export default function DynamicNavbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <Mountain
-              className={`h-8 w-8 transition-colors ${isScrolled ? 'text-emerald-600' : 'text-white'
+              className={`h-8 w-8 transition-colors ${shouldBeSolid ? 'text-emerald-600' : 'text-white'
                 } group-hover:text-emerald-500`}
             />
             <span
-              className={`text-xl font-bold transition-colors ${isScrolled ? 'text-gray-900' : 'text-white'
+              className={`text-xl font-bold transition-colors ${shouldBeSolid ? 'text-gray-900' : 'text-white'
                 }`}
             >
               PrauMountain
@@ -78,26 +66,25 @@ export default function DynamicNavbar() {
           <div className="hidden md:flex items-center gap-6">
             <Link
               href="/basecamps"
-              className={`text-sm font-medium transition-colors hover:text-emerald-500 ${isScrolled ? 'text-gray-700' : 'text-white/90'
+              className={`text-sm font-medium transition-colors hover:text-emerald-500 ${shouldBeSolid ? 'text-gray-700' : 'text-white/90'
                 }`}
             >
               Jelajahi Basecamp
             </Link>
             <Link
               href="/tentang"
-              className={`text-sm font-medium transition-colors hover:text-emerald-500 ${isScrolled ? 'text-gray-700' : 'text-white/90'
+              className={`text-sm font-medium transition-colors hover:text-emerald-500 ${shouldBeSolid ? 'text-gray-700' : 'text-white/90'
                 }`}
             >
               Tentang Kami
             </Link>
 
             <div className="flex items-center gap-3 ml-4">
-              {/* LOGIKA CONDITIONAL RENDERING UNTUK DESKTOP */}
               {isLoggedIn ? (
                 <>
                   <Link
                     href="/dashboard"
-                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${isScrolled
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${shouldBeSolid
                         ? 'text-gray-700 hover:bg-gray-100'
                         : 'text-white hover:bg-white/10'
                       }`}
@@ -105,19 +92,21 @@ export default function DynamicNavbar() {
                     <LayoutDashboard className="h-4 w-4" />
                     Dashboard
                   </Link>
-                  <button
-                    onClick={handleLogout}
+                  {/* Tombol Logout Sederhana */}
+                  <Link
+                    href="/"
+                    onClick={() => setIsLoggedIn(false)}
                     className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-full text-sm font-medium hover:bg-red-600 transition-all shadow-lg hover:shadow-xl"
                   >
                     <LogOut className="h-4 w-4" />
                     Keluar
-                  </button>
+                  </Link>
                 </>
               ) : (
                 <>
                   <Link
                     href="/login"
-                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${isScrolled
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${shouldBeSolid
                         ? 'text-gray-700 hover:bg-gray-100'
                         : 'text-white hover:bg-white/10'
                       }`}
@@ -140,7 +129,7 @@ export default function DynamicNavbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-2 rounded-lg transition-colors ${isScrolled
+            className={`md:hidden p-2 rounded-lg transition-colors ${shouldBeSolid
                 ? 'text-gray-700 hover:bg-gray-100'
                 : 'text-white hover:bg-white/10'
               }`}
@@ -174,7 +163,6 @@ export default function DynamicNavbar() {
             </Link>
 
             <div className="pt-3 space-y-2 border-t border-gray-200">
-              {/* LOGIKA CONDITIONAL RENDERING UNTUK MOBILE */}
               {isLoggedIn ? (
                 <>
                   <Link
@@ -185,16 +173,17 @@ export default function DynamicNavbar() {
                     <LayoutDashboard className="h-4 w-4" />
                     Dashboard
                   </Link>
-                  <button
+                  <Link
+                    href="/"
                     onClick={() => {
                       setIsMobileMenuOpen(false);
-                      handleLogout();
+                      setIsLoggedIn(false);
                     }}
                     className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
                   >
                     <LogOut className="h-4 w-4" />
                     Keluar
-                  </button>
+                  </Link>
                 </>
               ) : (
                 <>
