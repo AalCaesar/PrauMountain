@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Mountain, Menu, X, LogIn, UserPlus, LayoutDashboard, LogOut } from 'lucide-react';
-import { getCurrentUser } from '@/app/actions/auth';
+import { getCurrentUser, logout } from '@/app/actions/auth';
 
 export default function DynamicNavbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -24,7 +24,6 @@ export default function DynamicNavbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Cek login dari server
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
@@ -36,6 +35,16 @@ export default function DynamicNavbar() {
     };
     checkLoginStatus();
   }, [pathname]);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setIsLoggedIn(false);
+      window.location.href = '/login';
+    } catch (error) {
+      console.error("Gagal logout:", error);
+    }
+  };
 
   return (
     <nav
@@ -88,14 +97,14 @@ export default function DynamicNavbar() {
                     <LayoutDashboard className="h-4 w-4" />
                     Dashboard
                   </Link>
-                  <Link
-                    href="/"
-                    onClick={() => setIsLoggedIn(false)}
+                  {/* logout */}
+                  <button
+                    onClick={handleLogout}
                     className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-full text-sm font-medium hover:bg-red-600 transition-all shadow-lg hover:shadow-xl"
                   >
                     <LogOut className="h-4 w-4" />
-                    Keluar
-                  </Link>
+                    Logout
+                  </button>
                 </>
               ) : (
                 <>
@@ -166,17 +175,16 @@ export default function DynamicNavbar() {
                     <LayoutDashboard className="h-4 w-4" />
                     Dashboard
                   </Link>
-                  <Link
-                    href="/"
+                  <button
                     onClick={() => {
                       setIsMobileMenuOpen(false);
-                      setIsLoggedIn(false);
+                      handleLogout();
                     }}
                     className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
                   >
                     <LogOut className="h-4 w-4" />
-                    Keluar
-                  </Link>
+                    Logout
+                  </button>
                 </>
               ) : (
                 <>
