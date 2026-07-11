@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { revalidatePath } from 'next/cache';
 import crypto from 'crypto';
 import { Resend } from 'resend';
 
@@ -136,6 +137,7 @@ export async function POST(request: NextRequest) {
       payment_type: notification.payment_type,
     });
 
+    console.log(`[WEBHOOK] Verifying signature for order: ${notification.order_id}`);
     // Verify signature
     const isValidSignature = verifySignature(
       notification.order_id,
@@ -199,11 +201,22 @@ export async function POST(request: NextRequest) {
 
     // Update booking status if needed
     if (newStatus) {
+      console.log(`[WEBHOOK] Executing database update for ${notification.order_id} -> ${newStatus}`);
+      
+      const updatePayload: any = {
+        status_booking: newStatus,
+        updated_at: new Date().toISOString()
+      };
+
+      if (newStatus === 'CONFIRMED') {
+        updatePayload.paid_at = new Date().toISOString();
+      } else if (newStatus === 'CANCELLED') {
+        updatePayload.cancelled_at = new Date().toISOString();
+      }
+
       const { data: booking, error: updateError } = await supabase
         .from('bookings')
-        .update({
-          status_booking: newStatus,
-        })
+        .update(updatePayload)
         .eq('kode_booking', notification.order_id)
         .select()
         .single();
@@ -220,11 +233,18 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      console.log(`Booking ${notification.order_id} updated to ${newStatus}`, {
+      console.log(`[WEBHOOK] Successfully updated Booking DB for order ${notification.order_id} to ${newStatus}`, {
         booking_id: booking?.id,
-        previous_status: 'PENDING_PAYMENT',
         new_status: newStatus,
       });
+
+      // Clear admin dashboard cache so the latest data is reflected
+      try {
+        revalidatePath('/dashboard/admin-basecamp/bookings');
+        console.log(`[WEBHOOK] revalidatePath called for /dashboard/admin-basecamp/bookings`);
+      } catch (cacheError) {
+        console.warn('[WEBHOOK] Failed to clear cache:', cacheError);
+      }
 
       // Send confirmation email if payment is confirmed
       if (newStatus === 'CONFIRMED' && booking) {

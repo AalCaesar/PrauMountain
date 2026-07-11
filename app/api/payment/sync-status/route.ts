@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { revalidatePath } from 'next/cache';
 const midtransClient = require('midtrans-client');
 import { Resend } from 'resend';
 import { jsPDF } from 'jspdf'; // 🔥 TAMBAHAN: Import jsPDF
@@ -55,11 +56,21 @@ export async function POST(request: NextRequest) {
     if (transactionStatus.transaction_status === 'settlement' || transactionStatus.transaction_status === 'capture') {
       const { error: updateError } = await supabase
         .from('bookings')
-        .update({ status_booking: 'CONFIRMED' })
+        .update({ 
+          status_booking: 'CONFIRMED',
+          paid_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
         .eq('id', booking_id);
 
       if (updateError) {
         return NextResponse.json({ error: 'Failed to update database' }, { status: 500 });
+      }
+
+      try {
+        revalidatePath('/dashboard/admin-basecamp/bookings');
+      } catch (cacheError) {
+        console.warn('Failed to clear cache for admin dashboard:', cacheError);
       }
 
       try {
