@@ -229,7 +229,7 @@ export async function POST(request: NextRequest) {
                 </div>
                 <p style="text-align: center; color: #4b5563;">E-Ticket PDF telah kami lampirkan pada email ini. Silakan unduh dan tunjukkan kepada petugas basecamp saat check-in.</p>
                 <div style="text-align: center; margin-top: 30px;">
-                  <a href="${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/dashboard/pendaki/booking/${booking.id}" 
+                  <a href="${process.env.NEXT_PUBLIC_BASE_URL || 'https://prau-mountain.vercel.app'}/dashboard/pendaki/booking/${booking.id}" 
                      style="background-color: #059669; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
                     Lihat Status Booking di Website
                   </a>

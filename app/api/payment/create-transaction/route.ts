@@ -71,9 +71,9 @@ export async function POST(request: NextRequest) {
         phone: '080000000000',
       },
       callbacks: {
-        finish: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/dashboard/pendaki/booking/${booking_id}?payment=success`,
-        error: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/dashboard/pendaki/booking/${booking_id}?payment=error`,
-        pending: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/dashboard/pendaki/booking/${booking_id}?payment=pending`,
+        finish: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://prau-mountain.vercel.app'}/dashboard/pendaki/booking/${booking_id}?payment=success`,
+        error: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://prau-mountain.vercel.app'}/dashboard/pendaki/booking/${booking_id}?payment=error`,
+        pending: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://prau-mountain.vercel.app'}/dashboard/pendaki/booking/${booking_id}?payment=pending`,
       },
     };
 
