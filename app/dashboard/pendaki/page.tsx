@@ -11,7 +11,8 @@ import {
   XCircle,
   AlertCircle,
   Ticket,
-  ArrowRight
+  ArrowRight,
+  Flag
 } from 'lucide-react';
 
 interface Booking {
@@ -159,6 +160,7 @@ export default async function PendakiDashboard() {
   const displayName = profile?.nama_lengkap || user.email;
 
   const bookings = await getUserBookings(user.id);
+  const selesaiCount = (bookings || []).filter(b => b.status_booking === 'CHECKED_OUT').length;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-gray-50">
@@ -189,7 +191,7 @@ export default async function PendakiDashboard() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
           <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 md:p-6">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-emerald-100 rounded-xl">
@@ -197,7 +199,7 @@ export default async function PendakiDashboard() {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Total Booking</p>
-                <p className="text-2xl font-bold text-gray-900">{bookings.length}</p>
+                <p className="text-2xl font-bold text-gray-900">{(bookings || []).length}</p>
               </div>
             </div>
           </div>
@@ -210,7 +212,7 @@ export default async function PendakiDashboard() {
               <div>
                 <p className="text-sm text-gray-600">Menunggu Pembayaran</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {bookings.filter(b => b.status_booking === 'PENDING_PAYMENT').length}
+                  {(bookings || []).filter(b => b.status_booking === 'PENDING_PAYMENT').length}
                 </p>
               </div>
             </div>
@@ -224,7 +226,21 @@ export default async function PendakiDashboard() {
               <div>
                 <p className="text-sm text-gray-600">Terkonfirmasi</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {bookings.filter(b => b.status_booking === 'CONFIRMED' || b.status_booking === 'CHECKED_IN').length}
+                  {(bookings || []).filter(b => b.status_booking === 'CONFIRMED' || b.status_booking === 'CHECKED_IN').length}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 md:p-6">
+            <div className="flex items-center gap-3 md:gap-4">
+              <div className="p-2 md:p-3 bg-emerald-100 rounded-xl">
+                <Flag className="h-5 w-5 md:h-6 md:w-6 text-emerald-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Pendakian Selesai</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {selesaiCount}
                 </p>
               </div>
             </div>
