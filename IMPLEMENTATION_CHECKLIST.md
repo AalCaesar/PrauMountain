@@ -32,9 +32,9 @@
 - ✅ Filter pencarian real-time Basecamp di Landing Page
 - ✅ Manajemen & Validasi Kuota Harian Real-time (Sisi Pendaki & Admin)
 - ✅ Protokol Eskalasi Darurat (Overdue Hikers Alert) di Dasbor Admin
+- ✅ Statistik Kepatuhan SOP & KPI Lingkungan Basecamp
 
 **Still Pending:**
-- ❌ Statistik kepatuhan SOP & KPI Basecamp
 - ❌ Super Admin laporan per basecamp & audit trail
 - ❌ Seluruh Phase 4 - Testing & QA (16 tasks)
 - ❌ Sebagian besar Phase 5 - Deployment (11 dari 14 tasks)
@@ -155,7 +155,7 @@
 #### Laporan & Statistik
 - [x] Laporan booking per periode
 - [x] Laporan pendapatan
-- [ ] Statistik kepatuhan SOP sampah
+- [x] Statistik kepatuhan SOP sampah & Logistik (KPI Basecamp)
 - [ ] Dashboard KPI basecamp
 
 ---

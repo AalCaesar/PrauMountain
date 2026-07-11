@@ -4,9 +4,11 @@ import { redirect } from 'next/navigation';
 import { getDashboardStats } from './actions';
 import { getAdminQuotaStats } from '@/app/actions/quota';
 import { getOverdueHikers } from '@/app/actions/emergency';
+import { getComplianceStats } from '@/app/actions/kpi';
 import DashboardStats from './components/DashboardStats';
 import QuotaCapacity from './components/QuotaCapacity';
 import OverdueAlertWidget from './components/OverdueAlertWidget';
+import SopComplianceChart from './components/SopComplianceChart';
 
 export default async function AdminBasecampDashboard() {
   const supabase = await createClient();
@@ -26,7 +28,7 @@ export default async function AdminBasecampDashboard() {
   const statsResponse = await getDashboardStats();
   const stats = statsResponse.success ? statsResponse.data : null;
 
-  // Ambil basecamp_id untuk query kuota & emergency
+  // Ambil basecamp_id untuk query kuota, emergency, & kpi
   const { data: basecamp } = await supabase
     .from('basecamps')
     .select('id')
@@ -35,9 +37,11 @@ export default async function AdminBasecampDashboard() {
 
   let quotaStats = null;
   let overdueHikers: any[] = [];
+  let kpiStats = null;
   if (basecamp) {
     quotaStats = await getAdminQuotaStats(basecamp.id);
     overdueHikers = await getOverdueHikers(basecamp.id);
+    kpiStats = await getComplianceStats(basecamp.id);
   }
 
   return (
@@ -109,6 +113,9 @@ export default async function AdminBasecampDashboard() {
 
       {/* Dashboard Stats Section */}
       <DashboardStats stats={stats} />
+
+      {/* KPI & SOP Compliance Section */}
+      <SopComplianceChart data={kpiStats} />
 
       {/* Quota Capacity Section */}
       <QuotaCapacity statsData={quotaStats} />
