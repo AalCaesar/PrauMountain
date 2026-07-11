@@ -116,12 +116,12 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                         }
                       }}
                       className={`
-                        flex items-center gap-3 px-3 py-2.5 rounded-lg
+                        flex items-center gap-3 px-3 py-2.5 rounded-r-lg
                         transition-colors duration-150
                         ${
                           active
-                            ? 'bg-emerald-50 text-emerald-700 font-medium'
-                            : 'text-gray-700 hover:bg-gray-50'
+                            ? 'bg-emerald-50 text-emerald-700 font-semibold border-l-4 border-emerald-600'
+                            : 'text-slate-600 hover:bg-slate-50 border-l-4 border-transparent'
                         }
                       `}
                     >

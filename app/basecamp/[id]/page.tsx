@@ -35,10 +35,10 @@ const formatPrice = (price: number) => {
 
 const getDifficultyBadge = (difficulty: string) => {
   const badges = {
-    mudah: { label: 'Mudah', className: 'bg-emerald-100 text-emerald-800' },
-    sedang: { label: 'Sedang', className: 'bg-blue-100 text-blue-800' },
-    sulit: { label: 'Sulit', className: 'bg-amber-100 text-amber-800' },
-    ekstrem: { label: 'Ekstrem', className: 'bg-red-100 text-red-800' },
+    mudah: { label: 'Mudah', className: 'bg-emerald-50 text-emerald-700' },
+    sedang: { label: 'Sedang', className: 'bg-blue-50 text-blue-700' },
+    sulit: { label: 'Sulit', className: 'bg-amber-50 text-amber-700' },
+    ekstrem: { label: 'Ekstrem', className: 'bg-rose-50 text-rose-700' },
   };
   return badges[difficulty as keyof typeof badges] || badges.mudah;
 };
@@ -173,65 +173,52 @@ export default async function BasecampDetailPage({
                 return (
                   <div
                     key={trail.id}
-                    className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col"
+                    className="rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-emerald-500 overflow-hidden flex flex-col group"
                   >
-                    {/* Card Header */}
-                    <div className="p-6 border-b border-gray-100">
-                      <h3 className="text-xl font-bold text-gray-900 mb-3">
+                    <div className="p-6 sm:p-8 flex-1 flex flex-col">
+                      <h3 className="text-xl font-bold text-slate-800">
                         {trail.nama_jalur}
                       </h3>
-                      <p className="text-sm text-gray-600 line-clamp-3 mb-4">
+                      <p className="text-sm text-slate-500 leading-relaxed mt-2 line-clamp-3">
                         {trail.deskripsi || 'Jalur pendakian yang menantang dengan pemandangan indah'}
                       </p>
 
-                      {/* Difficulty Badge */}
-                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${difficulty.className}`}>
-                        <TrendingUp className="h-3 w-3 mr-1" />
-                        {difficulty.label}
-                      </span>
-                    </div>
+                      <div className="mt-4">
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${difficulty.className}`}>
+                          <TrendingUp className="h-3 w-3" />
+                          {difficulty.label}
+                        </span>
+                      </div>
 
-                    {/* Card Details */}
-                    <div className="p-6 space-y-4 flex-1">
-                      {/* Estimasi Waktu */}
-                      {trail.estimasi_waktu && (
-                        <div className="flex items-center gap-3">
-                          <Clock className="h-5 w-5 text-gray-400 flex-shrink-0" />
-                          <div>
-                            <p className="text-xs text-gray-500">Estimasi Waktu</p>
-                            <p className="text-sm font-medium text-gray-900">{trail.estimasi_waktu}</p>
+                      <div className="flex flex-col gap-3 my-6">
+                        {trail.estimasi_waktu && (
+                          <div className="flex items-center gap-3">
+                            <Clock className="h-5 w-5 text-slate-400 flex-shrink-0" />
+                            <span className="text-sm font-medium text-slate-700">
+                              {trail.estimasi_waktu}
+                            </span>
                           </div>
-                        </div>
-                      )}
-
-                      {/* Kuota */}
-                      <div className="flex items-center gap-3">
-                        <Users className="h-5 w-5 text-gray-400 flex-shrink-0" />
-                        <div>
-                          <p className="text-xs text-gray-500">Kuota Harian</p>
-                          <p className="text-sm font-medium text-gray-900">
+                        )}
+                        <div className="flex items-center gap-3">
+                          <Users className="h-5 w-5 text-slate-400 flex-shrink-0" />
+                          <span className="text-sm font-medium text-slate-700">
                             {trail.kuota_per_hari} orang/hari
-                          </p>
+                          </span>
                         </div>
                       </div>
 
-                      {/* Price */}
-                      <div className="pt-4 border-t border-gray-100">
-                        <p className="text-xs text-gray-500 mb-1">Harga per Orang</p>
-                        <p className="text-2xl font-bold text-emerald-600">
+                      <div className="border-t border-slate-100 pt-5 mt-auto">
+                        <p className="text-xs text-slate-500 mb-1">Harga per Orang</p>
+                        <p className="text-2xl font-black text-emerald-600">
                           {formatPrice(trail.harga_per_orang)}
                         </p>
+                        <Link
+                          href={`/booking/${trail.id}`}
+                          className="block w-full mt-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-center font-semibold py-3.5 transition-all duration-200 active:scale-95 shadow-md hover:shadow-lg"
+                        >
+                          Pesan Jalur Ini
+                        </Link>
                       </div>
-                    </div>
-
-                    {/* CTA Button */}
-                    <div className="p-6 pt-0">
-                      <Link
-                        href={`/booking/${trail.id}`}
-                        className="block w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-center font-semibold rounded-xl transition-colors"
-                      >
-                        Pesan Jalur Ini
-                      </Link>
                     </div>
                   </div>
                 );

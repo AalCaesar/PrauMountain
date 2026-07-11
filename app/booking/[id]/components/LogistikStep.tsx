@@ -78,63 +78,69 @@ export default function LogistikStep({ logistics, onChange, onNext, onBack }: Lo
   };
 
   return (
-    <div className="space-y-8">
-      {/* Info Section */}
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-        <p className="text-sm text-blue-800">
-          <strong>Catatan:</strong> Pilih peralatan yang akan Anda bawa. Ini membantu kami mempersiapkan fasilitas yang sesuai di basecamp.
-        </p>
-      </div>
+    <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-100 shadow-sm mb-6">
+      <h2 className="text-lg font-bold text-slate-800 border-b border-slate-100 pb-4 mb-5">
+        Peralatan Logistik
+      </h2>
+      
+      <div className="space-y-8">
+        {/* Info Section */}
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+          <p className="text-sm text-blue-800">
+            <strong>Catatan:</strong> Pilih peralatan yang akan Anda bawa. Ini membantu kami mempersiapkan fasilitas yang sesuai di basecamp.
+          </p>
+        </div>
 
-      {/* Logistics Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {logistikItems.map((item) => {
-          const Icon = item.icon;
-          const quantity = logistics[item.key];
+        {/* Logistics Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {logistikItems.map((item) => {
+            const Icon = item.icon;
+            const quantity = logistics[item.key];
 
-          return (
-            <div
-              key={item.key}
-              className="bg-white rounded-2xl border-2 border-gray-200 hover:border-emerald-300 transition-all shadow-sm hover:shadow-md p-4 md:p-6"
-            >
-              {/* Item Header */}
-              <div className="flex items-start gap-4 mb-4">
-                <div className="p-3 bg-emerald-50 rounded-xl">
-                  <Icon className="h-6 w-6 text-emerald-600" />
+            return (
+              <div
+                key={item.key}
+                className="bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 transition-all shadow-sm p-4 md:p-6"
+              >
+                {/* Item Header */}
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="p-3 bg-emerald-50 rounded-xl">
+                    <Icon className="h-6 w-6 text-emerald-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-slate-800">{item.name}</h3>
+                    <p className="text-sm text-slate-500 mt-1">{item.description}</p>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-bold text-gray-900">{item.name}</h3>
-                  <p className="text-sm text-gray-500 mt-1">{item.description}</p>
+
+                {/* Quantity Counter */}
+                <div className="flex items-center justify-between bg-slate-50 rounded-xl p-3 mt-auto">
+                  <button
+                    type="button"
+                    onClick={() => handleQuantityChange(item.key, -1)}
+                    disabled={quantity === 0}
+                    className="w-8 h-8 rounded-lg bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Minus className="h-4 w-4 text-slate-700" />
+                  </button>
+
+                  <div className="text-center w-12">
+                    <p className="text-lg font-bold text-slate-800">{quantity}</p>
+                    <p className="text-[10px] text-slate-500 uppercase tracking-wider">unit</p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleQuantityChange(item.key, 1)}
+                    className="w-8 h-8 rounded-lg bg-emerald-100 hover:bg-emerald-200 flex items-center justify-center transition-colors"
+                  >
+                    <Plus className="h-4 w-4 text-emerald-700" />
+                  </button>
                 </div>
               </div>
-
-              {/* Quantity Counter */}
-              <div className="flex items-center justify-between bg-gray-50 rounded-xl p-3">
-                <button
-                  type="button"
-                  onClick={() => handleQuantityChange(item.key, -1)}
-                  disabled={quantity === 0}
-                  className="min-h-[44px] min-w-[44px] p-2 bg-white hover:bg-gray-100 disabled:bg-gray-50 disabled:cursor-not-allowed rounded-lg border border-gray-200 transition-colors disabled:opacity-50"
-                >
-                  <Minus className="h-4 w-4 text-gray-700" />
-                </button>
-
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-900">{quantity}</p>
-                  <p className="text-xs text-gray-500">unit</p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => handleQuantityChange(item.key, 1)}
-                  className="min-h-[44px] min-w-[44px] p-2 bg-emerald-600 hover:bg-emerald-700 rounded-lg border border-emerald-600 transition-colors"
-                >
-                  <Plus className="h-4 w-4 text-white" />
-                </button>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
       {/* Navigation Buttons */}

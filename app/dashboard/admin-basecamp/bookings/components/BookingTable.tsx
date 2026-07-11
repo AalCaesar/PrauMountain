@@ -40,14 +40,14 @@ export default function BookingTable({ bookings }: BookingTableProps) {
   const getPaymentStatusBadge = (paidAt: string | null) => {
     if (paidAt) {
       return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">
           <Check className="h-3 w-3 mr-1" />
           Lunas
         </span>
       );
     }
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700">
         <Clock className="h-3 w-3 mr-1" />
         Pending
       </span>
@@ -56,19 +56,19 @@ export default function BookingTable({ bookings }: BookingTableProps) {
 
   const getBookingStatusBadge = (status: string) => {
     const badges: Record<string, { label: string; className: string }> = {
-      DRAFT: { label: 'Draft', className: 'bg-gray-100 text-gray-800' },
-      PENDING_PAYMENT: { label: 'Menunggu', className: 'bg-yellow-100 text-yellow-800' },
-      CONFIRMED: { label: 'Disetujui', className: 'bg-blue-100 text-blue-800' },
-      CHECKED_IN: { label: 'Check-in', className: 'bg-indigo-100 text-indigo-800' },
-      CHECKED_OUT: { label: 'Selesai', className: 'bg-green-100 text-green-800' },
-      CANCELLED: { label: 'Ditolak/Batal', className: 'bg-red-100 text-red-800' },
-      EXPIRED: { label: 'Kadaluarsa', className: 'bg-gray-100 text-gray-800' },
+      DRAFT: { label: 'Draft', className: 'bg-slate-100 text-slate-700' },
+      PENDING_PAYMENT: { label: 'Menunggu', className: 'bg-amber-100 text-amber-700' },
+      CONFIRMED: { label: 'Disetujui', className: 'bg-emerald-100 text-emerald-700' },
+      CHECKED_IN: { label: 'Check-in', className: 'bg-blue-100 text-blue-700' },
+      CHECKED_OUT: { label: 'Selesai', className: 'bg-indigo-100 text-indigo-700' },
+      CANCELLED: { label: 'Ditolak/Batal', className: 'bg-red-100 text-red-700' },
+      EXPIRED: { label: 'Kadaluarsa', className: 'bg-red-100 text-red-700' },
     };
 
-    const badge = badges[status] || { label: status, className: 'bg-gray-100 text-gray-800' };
+    const badge = badges[status] || { label: status, className: 'bg-slate-100 text-slate-700' };
 
     return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge.className}`}>
+      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${badge.className}`}>
         {badge.label}
       </span>
     );
@@ -141,39 +141,41 @@ export default function BookingTable({ bookings }: BookingTableProps) {
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              ID Booking
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Pendaki
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Jalur & Tanggal
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Jumlah
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Total Harga
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Pembayaran
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Status
-            </th>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Aksi
-            </th>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {bookings.map((booking) => (
-            <tr key={booking.id} className="hover:bg-gray-50 transition-colors">
+    <>
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-slate-100">
+          <thead className="bg-slate-50">
+            <tr>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 uppercase tracking-wider">
+                ID Booking
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 uppercase tracking-wider">
+                Pendaki
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 uppercase tracking-wider">
+                Jalur & Tanggal
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 uppercase tracking-wider">
+                Jumlah
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 uppercase tracking-wider">
+                Total Harga
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 uppercase tracking-wider">
+                Pembayaran
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 uppercase tracking-wider">
+                Status
+              </th>
+              <th className="px-6 py-4 text-right text-sm font-semibold text-slate-600 uppercase tracking-wider">
+                Aksi
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-slate-100">
+            {bookings.map((booking) => (
+              <tr key={booking.id} className="hover:bg-slate-50 transition-colors">
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm font-mono text-gray-900">{shortenId(booking.id)}</div>
                 <div className="text-xs text-gray-500">{formatDate(booking.created_at)}</div>
@@ -208,65 +210,64 @@ export default function BookingTable({ bookings }: BookingTableProps) {
                 {getBookingStatusBadge(booking.status_booking)}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <div className="flex items-center justify-end gap-2">
+                <div className="flex items-center justify-end gap-1">
                   {loadingId === booking.id ? (
-                    <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                    <Loader2 className="h-5 w-5 animate-spin text-slate-400" />
                   ) : (
                     <>
                       {canApprove(booking) && (
                         <button
                           onClick={() => handleStatusChange(booking.id, 'CONFIRMED')}
-                          className="inline-flex items-center px-2 py-1 text-xs font-medium text-green-700 bg-green-50 rounded hover:bg-green-100 transition-colors"
+                          className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-emerald-600 transition-all"
                           title="Setujui"
                         >
-                          <Check className="h-3 w-3 mr-1" />
-                          Setujui
+                          <Check className="h-5 w-5" />
                         </button>
                       )}
                       {canCheckIn(booking) && (
                         <button
                           onClick={() => handleStatusChange(booking.id, 'CHECKED_IN')}
-                          className="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-700 bg-blue-50 rounded hover:bg-blue-100 transition-colors"
+                          className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-blue-600 transition-all"
                           title="Check-in"
                         >
-                          Check-in
+                          <MapPin className="h-5 w-5" />
                         </button>
                       )}
                       {canCheckOut(booking) && (
                         <button
                           onClick={() => handleStatusChange(booking.id, 'CHECKED_OUT')}
-                          className="inline-flex items-center px-2 py-1 text-xs font-medium text-indigo-700 bg-indigo-50 rounded hover:bg-indigo-100 transition-colors"
+                          className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-indigo-600 transition-all"
                           title="Check-out"
                         >
-                          Check-out
+                          <Check className="h-5 w-5" />
                         </button>
                       )}
                       {canCancel(booking) && (
                         <button
                           onClick={() => handleCancel(booking.id)}
-                          className="inline-flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-50 rounded hover:bg-red-100 transition-colors"
+                          className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-red-600 transition-all"
                           title="Tolak/Batal"
                         >
-                          <X className="h-3 w-3 mr-1" />
-                          Tolak
+                          <X className="h-5 w-5" />
                         </button>
                       )}
                       <button
                         onClick={() => setSelectedBooking(booking)}
-                        className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
+                        className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-emerald-600 transition-all"
                         title="Lihat Detail"
                       >
-                        <Eye className="h-4 w-4" />
+                        <Eye className="h-5 w-5" />
                       </button>
                     </>
                   )}
                 </div>
               </td>
             </tr>
-          ))}
-        </tbody>
-      </table>
-
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
       {/* MODAL DETAIL BOOKING */}
       {selectedBooking && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
@@ -433,6 +434,6 @@ export default function BookingTable({ bookings }: BookingTableProps) {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

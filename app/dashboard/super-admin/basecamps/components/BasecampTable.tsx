@@ -122,37 +122,38 @@ export default function BasecampTable({ basecamps, admins }: BasecampTableProps)
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Basecamp
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Gunung
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Lokasi
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Admin
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Dibuat
-              </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Aksi
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-slate-100">
+            <thead className="bg-slate-50">
+              <tr>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 uppercase tracking-wider">
+                  Basecamp
+                </th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 uppercase tracking-wider">
+                  Gunung
+                </th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 uppercase tracking-wider">
+                  Lokasi
+                </th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 uppercase tracking-wider">
+                  Admin
+                </th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 uppercase tracking-wider">
+                  Dibuat
+                </th>
+                <th className="px-6 py-4 text-right text-sm font-semibold text-slate-600 uppercase tracking-wider">
+                  Aksi
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-slate-100">
             {currentBasecamps.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
+                <td colSpan={7} className="px-6 py-12 text-center text-slate-500">
                   {searchQuery || statusFilter !== 'all'
                     ? 'Tidak ada basecamp yang sesuai dengan filter.'
                     : 'Belum ada basecamp terdaftar.'}
@@ -160,7 +161,7 @@ export default function BasecampTable({ basecamps, admins }: BasecampTableProps)
               </tr>
             ) : (
               currentBasecamps.map((basecamp) => (
-                <tr key={basecamp.id} className="hover:bg-gray-50 transition-colors">
+                <tr key={basecamp.id} className="hover:bg-slate-50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
                       {basecamp.nama_basecamp}
@@ -185,10 +186,10 @@ export default function BasecampTable({ basecamps, admins }: BasecampTableProps)
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${
                         basecamp.status_buka
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : 'bg-gray-100 text-gray-800'
+                          ? 'bg-emerald-100 text-emerald-700'
+                          : 'bg-slate-100 text-slate-700'
                       }`}
                     >
                       {basecamp.status_buka ? 'Aktif' : 'Nonaktif'}
@@ -198,32 +199,32 @@ export default function BasecampTable({ basecamps, admins }: BasecampTableProps)
                     {new Date(basecamp.created_at).toLocaleDateString('id-ID')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex items-center justify-end gap-2">
+                    <div className="flex items-center justify-end gap-1">
                       <button
                         onClick={() => handleEdit(basecamp)}
-                        className="text-blue-600 hover:text-blue-900 transition-colors p-1"
+                        className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-blue-600 transition-all"
                         title="Edit"
                       >
-                        <Edit2 className="h-4 w-4" />
+                        <Edit2 className="h-5 w-5" />
                       </button>
                       <button
                         onClick={() => handleToggleStatus(basecamp.id, basecamp.status_buka)}
                         disabled={toggleLoadingId === basecamp.id}
-                        className={`${
+                        className={`p-2 rounded-lg hover:bg-slate-100 text-slate-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
                           basecamp.status_buka
-                            ? 'text-red-600 hover:text-red-900'
-                            : 'text-emerald-600 hover:text-emerald-900'
-                        } transition-colors p-1 disabled:opacity-50 disabled:cursor-not-allowed`}
+                            ? 'hover:text-red-600'
+                            : 'hover:text-emerald-600'
+                        }`}
                         title={basecamp.status_buka ? 'Nonaktifkan' : 'Aktifkan'}
                       >
-                        <Power className={`h-4 w-4 ${toggleLoadingId === basecamp.id ? 'animate-spin' : ''}`} />
+                        <Power className={`h-5 w-5 ${toggleLoadingId === basecamp.id ? 'animate-spin' : ''}`} />
                       </button>
                       <button
                         onClick={() => handleManageAdmin(basecamp)}
-                        className="text-purple-600 hover:text-purple-900 transition-colors p-1"
+                        className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-purple-600 transition-all"
                         title="Kelola Admin"
                       >
-                        <UserPlus className="h-4 w-4" />
+                        <UserPlus className="h-5 w-5" />
                       </button>
                     </div>
                   </td>
@@ -233,6 +234,7 @@ export default function BasecampTable({ basecamps, admins }: BasecampTableProps)
           </tbody>
         </table>
       </div>
+    </div>
 
       {totalPages > 1 && (
         <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200">
