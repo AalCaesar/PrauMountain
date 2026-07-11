@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Camera, Keyboard, RefreshCw } from 'lucide-react';
 import QRReader from './QRReader';
 import BookingResult from './BookingResult';
-import { getBookingById } from '../actions';
+import { getBookingByCode } from '../actions';
 
 type ScanMode = 'camera' | 'manual';
 
@@ -25,7 +25,7 @@ export default function ScannerManager() {
     setBooking(null);
 
     try {
-      const result = await getBookingById(bookingId.trim());
+      const result = await getBookingByCode(bookingId.trim());
 
       if (result.success && result.data) {
         setBooking(result.data);

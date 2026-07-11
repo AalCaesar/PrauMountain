@@ -3,7 +3,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 
-export async function getBookingById(bookingId: string) {
+export async function getBookingByCode(kode_booking: string) {
   try {
     const supabase = await createClient();
 
@@ -46,7 +46,7 @@ export async function getBookingById(bookingId: string) {
           status_pengecekan
         )
       `)
-      .eq('id', bookingId)
+      .eq('kode_booking', kode_booking)
       .single();
 
     if (error) {

@@ -9,33 +9,32 @@
 
 - **Phase 1**: Setup & Infrastructure - 9/11 tasks (82%)
 - **Phase 2**: Database & Auth - 16/18 tasks (89%)
-- **Phase 3**: Core Features - 54/76 tasks (71%)
+- **Phase 3**: Core Features - 57/76 tasks (75%)
 - **Phase 4**: Testing & QA - 0/16 tasks (0%)
 - **Phase 5**: Deployment - 3/14 tasks (21%)
 
-**Total Progress**: 82/135 tasks (61%)
+**Total Progress**: 85/135 tasks (62%)
 
 ✅ **CORE FLOW FULLY WORKING**: Booking creation, payment integration, E-Ticket, email konfirmasi, check-in/check-out dengan checklist detail, dan user dashboard berfungsi end-to-end!
 
 **✅ Recently Completed:**
-- ✅ E-Ticket generation dengan QR Code
-- ✅ Email konfirmasi booking + E-Ticket PDF
-- ✅ Download E-Ticket di user dashboard
-- ✅ Check-in checklist (verifikasi anggota KTP + logistik bawaan)
-- ✅ Check-out modal (laporan sampah + verifikasi logistik + konfirmasi)
+- ✅ Cron Job Auto-Expire Booking Unpaid via Vercel
+- ✅ Fitur Cancel Booking (Ditolak/Batal)
+- ✅ Modal Detail Booking Admin + Format Kolom Tabel
+- ✅ Penambahan Input Tanggal Turun di Form Booking
+- ✅ Penambahan Statistik "Pendakian Selesai" di Dashboard
+- ✅ Sinkronisasi Update status webhook dan `paid_at`
 - ✅ Status transitions CONFIRMED → CHECKED_IN & CHECKED_IN → CHECKED_OUT
 
 **Still Pending:**
-- ❌ Halaman check-in dengan QR scanner (perlu perbaikan)
-- ❌ Decode QR Code dari E-Ticket
+- ✅ Halaman check-in dengan QR scanner (kamera & manual)
+- ✅ Decode QR Code dari E-Ticket
 - ❌ Eskalasi darurat jika ada pendaki hilang
 - ❌ Laporan & Statistik admin basecamp (4 tasks)
 - ❌ Filter basecamp & cek kuota realtime
 - ❌ Kelola kuota per jalur per tanggal
-- ❌ Status transitions (EXPIRED, CANCELLED)
-- ❌ Automated tasks / cron jobs (auto-expire, reminder H-1, cleanup)
+- 🟡 Automated tasks / cron jobs (sisa reminder H-1, cleanup)
 - ❌ Sisa email notifications (welcome, payment link, reminder, thank you, pembatalan)
-- ❌ Cancel booking feature
 - ❌ Super Admin laporan per basecamp & audit trail
 - ❌ Seluruh Phase 4 - Testing & QA (16 tasks)
 - ❌ Sebagian besar Phase 5 - Deployment (11 dari 14 tasks)
@@ -131,8 +130,8 @@
 - [x] Update status booking manual (jika diperlukan)
 
 #### Check-In Management
-- [ ] Halaman check-in dengan QR scanner (camera + manual mode)
-- [ ] Decode QR Code dari E-Ticket
+- [x] Halaman check-in dengan QR scanner (camera + manual mode)
+- [x] Decode QR Code dari E-Ticket
 - [x] Validasi booking (status CONFIRMED, tanggal sesuai)
 - [x] Tampilkan list anggota rombongan untuk validasi fisik KTP
 - [x] Checkbox untuk tandai kehadiran setiap anggota
@@ -218,20 +217,21 @@
 
 ### 3.4 State Machine & Business Logic
 
+    
 #### Status Transitions
 - [x] Implementasi transisi DRAFT → PENDING_PAYMENT
 - [x] Implementasi transisi PENDING_PAYMENT → CONFIRMED (webhook)
-- [ ] Implementasi transisi PENDING_PAYMENT → EXPIRED (cron job)
+- [x] Implementasi transisi PENDING_PAYMENT → EXPIRED (cron job)
 - [x] Implementasi transisi CONFIRMED → CHECKED_IN
 - [x] Implementasi transisi CHECKED_IN → CHECKED_OUT
-- [ ] Implementasi pembatalan (CANCELLED dari berbagai status)
+- [x] Implementasi pembatalan (CANCELLED dari berbagai status)
 
 #### Background Jobs (Cron)
-- [ ] Cron job auto-expire pending payments (setiap 5 menit)
+- [x] Cron job auto-expire pending payments (setiap 1 jam via Vercel)
 - [ ] Cron job kirim reminder H-1 sebelum pendakian
 - [ ] Cron job cleanup booking lama (>6 bulan)
 
-**❌ STATUS**: **0% implemented**. Tidak ada cron libraries (node-cron, bull, agenda) di dependencies. Tidak ada scheduled tasks. Auto-expire dan reminders tidak akan berjalan.
+**🟡 STATUS**: **Partially implemented**. Auto-expire via Vercel Cron sudah berfungsi (memanggil API route `/api/cron/auto-expire`).
 
 #### Email Notifications
 - [ ] Email welcome untuk admin basecamp baru
@@ -310,6 +310,8 @@
 - ~~User Dashboard~~ - Complete with list & detail pages
 - ~~E-Ticket Generation~~ - QR code generation & E-Ticket implemented
 - ~~Email System~~ - Email sending capability integrated
+- ~~Cron Jobs (Auto-Expire)~~ - Cron via Vercel schedule implemented
+- ~~Status Transitions~~ - All status paths (including Cancelled & Expired) are working
 
 ### Technical Decisions
 
@@ -341,12 +343,10 @@
 
 Aplikasi sudah **PRODUCTION READY** untuk core booking & payment! Prioritas berikutnya untuk fitur tambahan:
 
-1. **[MEDIUM]** Setup cron jobs untuk auto-expire pending payments & H-1 reminders
+1. **[MEDIUM]** Setup cron jobs untuk H-1 reminders
 2. **[MEDIUM]** Implement sisa email notifications (welcome, payment link, reminder, thank you, pembatalan)
-3. **[MEDIUM]** Perbaiki halaman QR scanner & decode QR dari E-Ticket
-4. **[LOW]** Add database schema SQL files ke repository untuk version control
-5. **[LOW]** Implement cancel booking feature
-6. **[LOW]** Eskalasi darurat jika ada pendaki hilang
+3. **[LOW]** Add database schema SQL files ke repository untuk version control
+4. **[LOW]** Eskalasi darurat jika ada pendaki hilang
 
 **✅ FULLY COMPLETED:**
 - ~~Booking form database insertion~~
@@ -354,10 +354,9 @@ Aplikasi sudah **PRODUCTION READY** untuk core booking & payment! Prioritas beri
 - ~~User/Pendaki dashboard~~
 - ~~E-Ticket generation with QR code~~
 - ~~Email konfirmasi booking + E-Ticket~~
-- ~~Download E-Ticket di user dashboard~~
-- ~~Check-in checklist (anggota + logistik verification)~~
-- ~~Check-out modal (laporan sampah + logistik + konfirmasi)~~
-- ~~Status transitions: CONFIRMED→CHECKED_IN, CHECKED_IN→CHECKED_OUT~~
+- ~~Status transitions & Cancel Booking~~
+- ~~Cron Job Auto-Expire Bookings~~
+- ~~Halaman QR Scanner & Decode E-Ticket~~
 
 **🎉 MILESTONE ACHIEVED**: Users can successfully book, pay, and have their bookings automatically confirmed!
 
@@ -377,5 +376,5 @@ Aplikasi sudah **PRODUCTION READY** untuk core booking & payment! Prioritas beri
 | **Payment (Midtrans)** | ✅ | ✅ | ✅ | 🟢 **Working - auto-confirms!** |
 | **E-Ticket Generation** | ✅ | ✅ | ✅ | 🟢 **Working - QR code generated** |
 | **Email Notifications** | ✅ | ✅ | ✅ | 🟡 **Partial - konfirmasi booking done, sisa pending** |
-| **User Dashboard** | ✅ | ✅ | ✅ | 🟢 **Working - list & detail pages** |
-| **Cron Jobs** | ❌ | ❌ | ❌ | 🔴 **Not started** |
+| **User Dashboard** | ✅ | ✅ | ✅ | 🟢 **Working - list, detail & stat pages** |
+| **Cron Jobs** | ✅ | ✅ | ✅ | 🟡 **Partial - Auto-expire done** |
