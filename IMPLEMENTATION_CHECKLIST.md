@@ -9,11 +9,11 @@
 
 - **Phase 1**: Setup & Infrastructure - 9/11 tasks (82%)
 - **Phase 2**: Database & Auth - 16/18 tasks (89%)
-- **Phase 3**: Core Features - 57/76 tasks (75%)
+- **Phase 3**: Core Features - 62/76 tasks (82%)
 - **Phase 4**: Testing & QA - 0/16 tasks (0%)
 - **Phase 5**: Deployment - 3/14 tasks (21%)
 
-**Total Progress**: 85/135 tasks (62%)
+**Total Progress**: 90/135 tasks (67%)
 
 ✅ **CORE FLOW FULLY WORKING**: Booking creation, payment integration, E-Ticket, email konfirmasi, check-in/check-out dengan checklist detail, dan user dashboard berfungsi end-to-end!
 
@@ -25,19 +25,23 @@
 - ✅ Penambahan Statistik "Pendakian Selesai" di Dashboard
 - ✅ Sinkronisasi Update status webhook dan `paid_at`
 - ✅ Status transitions CONFIRMED → CHECKED_IN & CHECKED_IN → CHECKED_OUT
-
-**Still Pending:**
 - ✅ Halaman check-in dengan QR scanner (kamera & manual)
 - ✅ Decode QR Code dari E-Ticket
+- ✅ Dashboard Statistik & Laporan admin basecamp (Recharts)
+- ✅ Rombak UI/UX Global (Premium Styling Tailwind, Typografi Plus Jakarta Sans, Image Optimization)
+- ✅ Filter pencarian real-time Basecamp di Landing Page
+- ✅ Manajemen & Validasi Kuota Harian Real-time (Sisi Pendaki & Admin)
+
+**Still Pending:**
 - ❌ Eskalasi darurat jika ada pendaki hilang
-- ❌ Laporan & Statistik admin basecamp (4 tasks)
-- ❌ Filter basecamp & cek kuota realtime
-- ❌ Kelola kuota per jalur per tanggal
-- 🟡 Automated tasks / cron jobs (sisa reminder H-1, cleanup)
-- ❌ Sisa email notifications (welcome, payment link, reminder, thank you, pembatalan)
+- ❌ Statistik kepatuhan SOP & KPI Basecamp
 - ❌ Super Admin laporan per basecamp & audit trail
 - ❌ Seluruh Phase 4 - Testing & QA (16 tasks)
 - ❌ Sebagian besar Phase 5 - Deployment (11 dari 14 tasks)
+
+**Skipped (Dilewati Sementara):**
+- ⏭️ Automated tasks / cron jobs (sisa reminder H-1, cleanup) (skip)
+- ⏭️ Sisa email notifications (welcome, payment link, reminder, thank you, pembatalan) (skip dulu bayar soalnya)
 
 ---
 
@@ -122,7 +126,7 @@
 - [x] Form tambah jalur baru (nama, deskripsi, kuota, harga, tingkat kesulitan)
 - [x] Form edit jalur
 - [x] Aktifkan/nonaktifkan jalur
-- [ ] Kelola kuota per jalur per tanggal
+- [x] Kelola kuota per jalur per tanggal (Dashboard kapasitas kuota admin)
 
 #### Manage Booking
 - [x] Halaman daftar booking (filter by status, tanggal, jalur)
@@ -149,8 +153,8 @@
 - [ ] Eskalasi darurat jika ada pendaki hilang
 
 #### Laporan & Statistik
-- [ ] Laporan booking per periode
-- [ ] Laporan pendapatan
+- [x] Laporan booking per periode
+- [x] Laporan pendapatan
 - [ ] Statistik kepatuhan SOP sampah
 - [ ] Dashboard KPI basecamp
 
@@ -160,14 +164,14 @@
 
 #### Landing Page & Browsing
 - [x] Landing page dengan daftar basecamp
-- [ ] Filter basecamp (lokasi, fasilitas, rating)
+- [x] Filter basecamp (lokasi, fasilitas, rating)
 - [x] Halaman detail basecamp
 - [x] Daftar jalur pendakian per basecamp
 - [x] Detail jalur (deskripsi, harga, kuota tersisa, tingkat kesulitan)
 
 #### Booking Flow
 - [x] Form pilih tanggal pendakian
-- [ ] Cek ketersediaan kuota realtime
+- [x] Cek ketersediaan kuota realtime
 - [x] Form input jumlah anggota
 - [x] Form input data anggota rombongan (nama, NIK, telepon, alamat)
 - [x] Validasi NIK 16 digit
@@ -233,7 +237,7 @@
 
 **🟡 STATUS**: **Partially implemented**. Auto-expire via Vercel Cron sudah berfungsi (memanggil API route `/api/cron/auto-expire`).
 
-#### Email Notifications
+#### Email Notifications (skip dulu bayar soalnya)
 - [ ] Email welcome untuk admin basecamp baru
 - [ ] Email payment link untuk pendaki
 - [x] Email konfirmasi booking + E-Ticket

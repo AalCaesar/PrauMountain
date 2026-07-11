@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Calendar, Users, ChevronUp, ChevronDown, Plus, Minus, User, CreditCard, AlertCircle, Tent } from 'lucide-react';
 import { createClient } from '@/utils/supabase/client';
+import { checkSisaKuota } from '@/app/actions/quota';
 import Stepper from './Stepper';
 import LogistikStep from './LogistikStep';
 import ReviewStep from './ReviewStep';
@@ -98,6 +99,38 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [sisaKuota, setSisaKuota] = useState<number | null>(null);
+  const [isCheckingQuota, setIsCheckingQuota] = useState(false);
+
+  useEffect(() => {
+    async function fetchQuota() {
+      if (hikingDate) {
+        setIsCheckingQuota(true);
+        try {
+          const result = await checkSisaKuota(trail.id, hikingDate);
+          setSisaKuota(result.sisaKuota);
+          
+          if (result.isFull) {
+             setErrors(prev => ({ ...prev, hikingDate: 'Kuota penuh pada tanggal ini.' }));
+          } else if (hikerCount > result.sisaKuota) {
+             setErrors(prev => ({ ...prev, hikerCount: `Jumlah pendaki (${hikerCount}) melebihi sisa kuota (${result.sisaKuota}).` }));
+          } else {
+             const newErrors = { ...errors };
+             delete newErrors.hikingDate;
+             delete newErrors.hikerCount;
+             setErrors(newErrors);
+          }
+        } catch (error) {
+          console.error("Error fetching quota", error);
+        } finally {
+          setIsCheckingQuota(false);
+        }
+      } else {
+        setSisaKuota(null);
+      }
+    }
+    fetchQuota();
+  }, [hikingDate, trail.id, hikerCount]);
 
   useEffect(() => {
     if (hikerCount > hikerDetails.length) {
@@ -125,6 +158,12 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
 
     if (!hikingDate) {
       newErrors.hikingDate = 'Tanggal pendakian wajib diisi';
+    } else if (sisaKuota !== null) {
+      if (sisaKuota === 0) {
+        newErrors.hikingDate = 'Kuota penuh pada tanggal ini.';
+      } else if (hikerCount > sisaKuota) {
+        newErrors.hikerCount = `Jumlah pendaki (${hikerCount}) melebihi sisa kuota (${sisaKuota}).`;
+      }
     }
     if (!hikingReturnDate) {
       newErrors.hikingReturnDate = 'Tanggal turun wajib diisi';
@@ -328,6 +367,16 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
                     className={`bg-slate-50 border rounded-xl px-4 py-3 text-slate-700 transition-all focus:bg-white focus:ring-2 outline-none w-full ${errors.hikingDate ? 'border-red-500 focus:ring-red-500' : 'border-slate-200 focus:ring-emerald-500 focus:border-emerald-500'
                       }`}
                   />
+                  {isCheckingQuota && (
+                    <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
+                      <span className="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-500"></span> Mengecek kuota...
+                    </p>
+                  )}
+                  {!isCheckingQuota && sisaKuota !== null && (
+                    <p className={`text-xs mt-2 font-medium ${sisaKuota === 0 ? 'text-red-500' : sisaKuota <= 10 ? 'text-amber-500' : 'text-emerald-600'}`}>
+                      Sisa kuota: {sisaKuota} orang
+                    </p>
+                  )}
                   {errors.hikingDate && (
                     <p className="text-xs text-red-500 mt-1">{errors.hikingDate}</p>
                   )}
@@ -380,11 +429,15 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
                   <button
                     type="button"
                     onClick={() => setHikerCount(hikerCount + 1)}
-                    className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors"
+                    disabled={sisaKuota !== null && hikerCount >= sisaKuota}
+                    className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Plus className="h-4 w-4 text-slate-700" />
                   </button>
                 </div>
+                {errors.hikerCount && (
+                  <p className="text-xs text-red-500 mt-2">{errors.hikerCount}</p>
+                )}
               </div>
 
               {/* Hiker Details */}

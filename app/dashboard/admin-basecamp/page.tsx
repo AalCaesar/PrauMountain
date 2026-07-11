@@ -2,7 +2,9 @@ import { createClient } from '@/utils/supabase/server';
 import { LayoutDashboard, Map, CalendarDays, QrCode } from 'lucide-react';
 import { redirect } from 'next/navigation';
 import { getDashboardStats } from './actions';
+import { getAdminQuotaStats } from '@/app/actions/quota';
 import DashboardStats from './components/DashboardStats';
+import QuotaCapacity from './components/QuotaCapacity';
 
 export default async function AdminBasecampDashboard() {
   const supabase = await createClient();
@@ -22,6 +24,18 @@ export default async function AdminBasecampDashboard() {
   const statsResponse = await getDashboardStats();
   const stats = statsResponse.success ? statsResponse.data : null;
 
+  // Ambil basecamp_id untuk query kuota
+  const { data: basecamp } = await supabase
+    .from('basecamps')
+    .select('id')
+    .eq('admin_id', user.id)
+    .single();
+
+  let quotaStats = null;
+  if (basecamp) {
+    quotaStats = await getAdminQuotaStats(basecamp.id);
+  }
+
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
@@ -30,7 +44,7 @@ export default async function AdminBasecampDashboard() {
           Selamat Datang di Dashboard Admin Basecamp
         </h1>
         <p className="text-gray-600">
-          Halo, <span className="font-medium text-gray-900">{userData?.nama_lengkap || userData?.email}</span>!
+          Halo, <span className="font-medium text-gray-900">{displayName}</span>!
           Pilih menu di samping untuk mengelola operasional pendakian Anda.
         </p>
       </div>
@@ -88,6 +102,9 @@ export default async function AdminBasecampDashboard() {
 
       {/* Dashboard Stats Section */}
       <DashboardStats stats={stats} />
+
+      {/* Quota Capacity Section */}
+      <QuotaCapacity statsData={quotaStats} />
 
       {/* Info Section */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
