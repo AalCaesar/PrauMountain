@@ -120,7 +120,7 @@ export async function signIn(formData: {
   }
 
   revalidatePath('/', 'layout');
-  redirect('/dashboard');
+  redirect('/');
 }
 
 /**

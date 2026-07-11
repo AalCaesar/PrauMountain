@@ -149,6 +149,14 @@ export default async function PendakiDashboard() {
     redirect('/login');
   }
 
+  const { data: profile } = await supabase
+    .from('users')
+    .select('nama_lengkap')
+    .eq('id', user.id)
+    .single();
+
+  const displayName = profile?.nama_lengkap || user.email;
+
   const bookings = await getUserBookings(user.id);
 
   return (
@@ -162,7 +170,7 @@ export default async function PendakiDashboard() {
                 Dashboard Pendaki
               </h1>
               <p className="text-sm md:text-base text-gray-600">
-                Selamat datang kembali, <span className="font-medium text-emerald-600">{user.email}</span>
+                Selamat datang, <span className="font-medium text-emerald-600">{displayName}</span>
               </p>
             </div>
             <Link
