@@ -7,20 +7,38 @@
 
 ## 📊 Progress Overview
 
-- **Phase 1**: Setup & Infrastructure - 8/10 tasks (80%)
+- **Phase 1**: Setup & Infrastructure - 9/11 tasks (82%)
 - **Phase 2**: Database & Auth - 16/18 tasks (89%)
-- **Phase 3**: Core Features - 36/36 tasks (100%) ✅ *Booking, payment, E-Ticket & Email DONE*
-- **Phase 4**: Testing & QA - 0/8 tasks (0%)
-- **Phase 5**: Deployment - 0/6 tasks (0%)
+- **Phase 3**: Core Features - 54/76 tasks (71%)
+- **Phase 4**: Testing & QA - 0/16 tasks (0%)
+- **Phase 5**: Deployment - 3/14 tasks (21%)
 
-**Total Progress**: 60/72 tasks (83%)
+**Total Progress**: 82/135 tasks (61%)
 
-✅ **CORE FLOW FULLY WORKING**: Booking creation, payment integration WITH auto-confirmation, dan user dashboard berfungsi end-to-end!
+✅ **CORE FLOW FULLY WORKING**: Booking creation, payment integration, E-Ticket, email konfirmasi, check-in/check-out dengan checklist detail, dan user dashboard berfungsi end-to-end!
+
+**✅ Recently Completed:**
+- ✅ E-Ticket generation dengan QR Code
+- ✅ Email konfirmasi booking + E-Ticket PDF
+- ✅ Download E-Ticket di user dashboard
+- ✅ Check-in checklist (verifikasi anggota KTP + logistik bawaan)
+- ✅ Check-out modal (laporan sampah + verifikasi logistik + konfirmasi)
+- ✅ Status transitions CONFIRMED → CHECKED_IN & CHECKED_IN → CHECKED_OUT
 
 **Still Pending:**
-- ❌ E-Ticket & QR code generation
-- ❌ Email notifications
-- ❌ Automated tasks (cron jobs)
+- ❌ Halaman check-in dengan QR scanner (perlu perbaikan)
+- ❌ Decode QR Code dari E-Ticket
+- ❌ Eskalasi darurat jika ada pendaki hilang
+- ❌ Laporan & Statistik admin basecamp (4 tasks)
+- ❌ Filter basecamp & cek kuota realtime
+- ❌ Kelola kuota per jalur per tanggal
+- ❌ Status transitions (EXPIRED, CANCELLED)
+- ❌ Automated tasks / cron jobs (auto-expire, reminder H-1, cleanup)
+- ❌ Sisa email notifications (welcome, payment link, reminder, thank you, pembatalan)
+- ❌ Cancel booking feature
+- ❌ Super Admin laporan per basecamp & audit trail
+- ❌ Seluruh Phase 4 - Testing & QA (16 tasks)
+- ❌ Sebagian besar Phase 5 - Deployment (11 dari 14 tasks)
 
 ---
 
@@ -87,7 +105,7 @@
 - [x] Form buat admin basecamp + kirim email credentials
 
 #### Monitoring & Analytics
-- [ ] Dashboard analytics global (total booking, revenue, dll)
+- [x] Dashboard analytics global (total booking, revenue, dll)
 - [ ] Laporan per basecamp
 - [ ] Audit trail / activity log
 
@@ -113,21 +131,21 @@
 - [x] Update status booking manual (jika diperlukan)
 
 #### Check-In Management
-- [x] Halaman check-in dengan QR scanner (camera + manual mode)
-- [ ] Decode QR Code dari E-Ticket (**E-Ticket belum ada!**)
+- [ ] Halaman check-in dengan QR scanner (camera + manual mode)
+- [ ] Decode QR Code dari E-Ticket
 - [x] Validasi booking (status CONFIRMED, tanggal sesuai)
-- [ ] Tampilkan list anggota rombongan untuk validasi fisik KTP
-- [ ] Checkbox untuk tandai kehadiran setiap anggota
-- [ ] Verifikasi dan update logistik bawaan
-- [x] Update status booking ke CHECKED_IN (basic implementation)
+- [x] Tampilkan list anggota rombongan untuk validasi fisik KTP
+- [x] Checkbox untuk tandai kehadiran setiap anggota
+- [x] Verifikasi dan update logistik bawaan
+- [x] Update status booking ke CHECKED_IN
 
-**⚠️ STATUS**: Scanner berfungsi, tapi workflow detail (KTP verification, attendance checklist, logistik verification) belum diimplementasikan. Hanya basic status update.
+**✅ STATUS**: Check-in workflow lengkap dengan checklist verifikasi anggota (KTP), checklist logistik bawaan, progress bar, dan tombol konfirmasi yang hanya aktif setelah semua item diverifikasi.
 
 #### Check-Out Management
 - [x] Halaman check-out (cari booking by code atau scan QR)
-- [ ] Validasi jumlah pendaki yang turun
-- [ ] Form input data sampah (berat, jenis)
-- [ ] Checklist peralatan yang dibawa turun
+- [x] Validasi jumlah pendaki yang turun (checkbox konfirmasi di modal)
+- [x] Form input data sampah (berat, jenis) → insert ke tabel laporan_sampah
+- [x] Checklist peralatan yang dibawa turun (logistik verification di modal)
 - [x] Update status booking ke CHECKED_OUT
 - [ ] Eskalasi darurat jika ada pendaki hilang
 
@@ -174,7 +192,7 @@
 - [x] Generate E-Ticket dengan QR Code (requires qrcode library)
 - [x] Kirim email konfirmasi + E-Ticket PDF (requires email service)
 
-**✅ STATUS**: **Midtrans Snap FULLY INTEGRATED (85% complete)**
+**✅ STATUS**: **Midtrans Snap FULLY INTEGRATED (100% complete)**
 - `midtrans-client` package installed
 - API route at `app/api/payment/create-transaction/route.ts`
 - Payment utility at `lib/payment.ts`
@@ -182,7 +200,8 @@
 - **Webhook handler at `app/api/payment/webhook/route.ts` (AUTO-CONFIRMS PAYMENT!)**
 - Credentials configured in `.env.local`
 - ✅ **Payment flow working end-to-end with auto-confirmation**
-- ❌ **NOT STARTED**: email notifications
+- ✅ **E-Ticket generation with QR code implemented**
+- ✅ **Email notifications integrated**
 
 #### User Dashboard
 - [x] Halaman riwayat booking
@@ -203,8 +222,8 @@
 - [x] Implementasi transisi DRAFT → PENDING_PAYMENT
 - [x] Implementasi transisi PENDING_PAYMENT → CONFIRMED (webhook)
 - [ ] Implementasi transisi PENDING_PAYMENT → EXPIRED (cron job)
-- [ ] Implementasi transisi CONFIRMED → CHECKED_IN
-- [ ] Implementasi transisi CHECKED_IN → CHECKED_OUT
+- [x] Implementasi transisi CONFIRMED → CHECKED_IN
+- [x] Implementasi transisi CHECKED_IN → CHECKED_OUT
 - [ ] Implementasi pembatalan (CANCELLED dari berbagai status)
 
 #### Background Jobs (Cron)
@@ -222,7 +241,7 @@
 - [ ] Email thank you + request feedback setelah checkout
 - [ ] Email pembatalan booking
 
-**❌ STATUS**: **0% implemented**. Tidak ada email libraries (nodemailer, resend, sendgrid) di dependencies. Files yang menyebut "email" hanya untuk form input dan display, bukan untuk sending.
+**✅ STATUS**: Email service sudah terintegrasi. Email konfirmasi booking + E-Ticket sudah berfungsi. Sisa email (welcome, payment link, reminder, thank you, pembatalan) belum diimplementasikan.
 
 ---
 
@@ -258,15 +277,15 @@
 
 ### 5.1 Pre-Deployment
 - [ ] Code review & refactoring
-- [ ] Setup production environment variables
+- [x] Setup production environment variables
 - [ ] Setup production Supabase project
 - [ ] Migrate schema ke production database
 - [ ] Setup domain & SSL certificate
 
 ### 5.2 Deployment
-- [ ] Deploy ke Vercel/Netlify/VPS
+- [x] Deploy ke Vercel
 - [ ] Setup custom domain
-- [ ] Test production environment
+- [x] Test production environment
 - [ ] Setup monitoring (error tracking, analytics)
 - [ ] Setup backup database otomatis
 
@@ -283,16 +302,14 @@
 
 ### Current Blockers
 
-1. **🚨 CRITICAL - E-Ticket Generation**: Tidak ada QR code generation library. Library `html5-qrcode` hanya untuk scanning, bukan generation. Perlu install `qrcode` atau `qr-image` package. E-Ticket tidak bisa dibuat dan dikirim ke pendaki.
-
-2. **❌ HIGH PRIORITY - Email System**: Tidak ada email sending capability. Konfirmasi booking, E-Ticket, dan reminders tidak bisa dikirim. Perlu integrate email service (Resend/Nodemailer/SendGrid).
-
-3. **⚠️ INCOMPLETE - Database Schema**: CREATE TABLE statements tidak ada di repository. Hanya RLS policies yang version-controlled di `supabase_rls_policies.sql`.
+1. **⚠️ INCOMPLETE - Database Schema**: CREATE TABLE statements tidak ada di repository. Hanya RLS policies yang version-controlled di `supabase_rls_policies.sql`.
 
 **✅ FULLY RESOLVED:**
 - ~~Booking Creation~~ - COMPLETE with full database insertion
 - ~~Payment Gateway~~ - Midtrans Snap fully integrated with webhook auto-confirmation
 - ~~User Dashboard~~ - Complete with list & detail pages
+- ~~E-Ticket Generation~~ - QR code generation & E-Ticket implemented
+- ~~Email System~~ - Email sending capability integrated
 
 ### Technical Decisions
 
@@ -301,8 +318,8 @@
 - **UI**: Tailwind CSS 4.0, Lucide React icons
 - **QR Scanning**: html5-qrcode library (scanning only)
 - **Payment**: ✅ Midtrans Snap (sandbox configured, credentials in .env.local)
-- **Email**: Belum dipilih (Nodemailer? Resend? SendGrid?)
-- **QR Generation**: Belum dipilih (qrcode? qr-image?)
+- **Email**: ✅ Terintegrasi (konfirmasi booking + E-Ticket)
+- **QR Generation**: ✅ Terintegrasi untuk E-Ticket
 
 ### Future Enhancements (Post-MVP)
 - [ ] Sistem rating & review untuk basecamp
@@ -314,9 +331,9 @@
 
 ---
 
-**Last Updated**: 2026-07-09  
-**Project Status**: 🟢 Production Ready - Core Booking & Payment Working  
-**Current Phase**: Phase 3 - Core Features (34/36 completed - 94%!)
+**Last Updated**: 2026-07-11  
+**Project Status**: 🟡 In Progress - Core Booking & Payment Working, banyak fitur pending  
+**Current Phase**: Phase 3 - Core Features (54/76 completed - 71%)
 
 ---
 
@@ -324,20 +341,23 @@
 
 Aplikasi sudah **PRODUCTION READY** untuk core booking & payment! Prioritas berikutnya untuk fitur tambahan:
 
-1. **[CRITICAL]** Install & integrate QR generation library (qrcode/qr-image) untuk E-Ticket
-2. **[CRITICAL]** Setup email service (Resend/Nodemailer) untuk konfirmasi booking
-3. **[HIGH]** Generate E-Ticket PDF dengan QR code setelah payment confirmed
-4. **[HIGH]** Kirim email dengan E-Ticket attachment setelah payment
-5. **[HIGH]** Implement download E-Ticket di user dashboard
-6. **[MEDIUM]** Setup cron jobs untuk auto-expire pending payments & H-1 reminders
-7. **[MEDIUM]** Complete check-in/check-out detailed validation workflows
-8. **[LOW]** Add database schema SQL files ke repository untuk version control
-9. **[LOW]** Implement cancel booking feature
+1. **[MEDIUM]** Setup cron jobs untuk auto-expire pending payments & H-1 reminders
+2. **[MEDIUM]** Implement sisa email notifications (welcome, payment link, reminder, thank you, pembatalan)
+3. **[MEDIUM]** Perbaiki halaman QR scanner & decode QR dari E-Ticket
+4. **[LOW]** Add database schema SQL files ke repository untuk version control
+5. **[LOW]** Implement cancel booking feature
+6. **[LOW]** Eskalasi darurat jika ada pendaki hilang
 
 **✅ FULLY COMPLETED:**
 - ~~Booking form database insertion~~
 - ~~Midtrans payment integration with webhook~~
 - ~~User/Pendaki dashboard~~
+- ~~E-Ticket generation with QR code~~
+- ~~Email konfirmasi booking + E-Ticket~~
+- ~~Download E-Ticket di user dashboard~~
+- ~~Check-in checklist (anggota + logistik verification)~~
+- ~~Check-out modal (laporan sampah + logistik + konfirmasi)~~
+- ~~Status transitions: CONFIRMED→CHECKED_IN, CHECKED_IN→CHECKED_OUT~~
 
 **🎉 MILESTONE ACHIEVED**: Users can successfully book, pay, and have their bookings automatically confirmed!
 
@@ -352,10 +372,10 @@ Aplikasi sudah **PRODUCTION READY** untuk core booking & payment! Prioritas beri
 | Super Admin - Basecamps | ✅ | ✅ | ✅ | 🟢 Working |
 | Admin - Jalur Management | ✅ | ✅ | ✅ | 🟢 Working |
 | Admin - View Bookings | ✅ | ✅ | ✅ | 🟢 Working |
-| Admin - QR Scanner | ✅ | ⚠️ | ⚠️ | 🟡 Partial (basic only) |
+| Admin - Check-in/Check-out | ✅ | ✅ | ✅ | 🟢 **Working - checklist & modal** |
 | **Booking Form** | ✅ | ✅ | ✅ | 🟢 **Working - saves to DB** |
 | **Payment (Midtrans)** | ✅ | ✅ | ✅ | 🟢 **Working - auto-confirms!** |
-| **E-Ticket Generation** | ❌ | ❌ | ❌ | 🔴 **Not started** |
-| **Email Notifications** | ❌ | ❌ | ❌ | 🔴 **Not started** |
+| **E-Ticket Generation** | ✅ | ✅ | ✅ | 🟢 **Working - QR code generated** |
+| **Email Notifications** | ✅ | ✅ | ✅ | 🟡 **Partial - konfirmasi booking done, sisa pending** |
 | **User Dashboard** | ✅ | ✅ | ✅ | 🟢 **Working - list & detail pages** |
 | **Cron Jobs** | ❌ | ❌ | ❌ | 🔴 **Not started** |

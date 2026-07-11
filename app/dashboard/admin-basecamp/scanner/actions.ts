@@ -23,7 +23,7 @@ export async function getBookingById(bookingId: string) {
       return { success: false, error: 'No basecamp assigned to your account', data: null };
     }
 
-    // Fetch booking with joined data
+    // Fetch booking with joined data including anggota_rombongan and logistik_bawaan
     const { data: booking, error } = await supabase
       .from('bookings')
       .select(`
@@ -35,6 +35,15 @@ export async function getBookingById(bookingId: string) {
         users:user_id (
           nama_lengkap,
           email
+        ),
+        anggota_rombongan (
+          id,
+          nama_anggota
+        ),
+        logistik_bawaan (
+          id,
+          nama_barang,
+          status_pengecekan
         )
       `)
       .eq('id', bookingId)
@@ -61,7 +70,11 @@ export async function getBookingById(bookingId: string) {
   }
 }
 
-export async function processCheckIn(bookingId: string) {
+export async function processCheckIn(
+  bookingId: string,
+  verifiedMemberIds: string[],
+  verifiedLogisticsIds: string[]
+) {
   try {
     const supabase = await createClient();
 
@@ -81,10 +94,18 @@ export async function processCheckIn(bookingId: string) {
       return { success: false, error: 'No basecamp assigned to your account' };
     }
 
-    // Verify the booking belongs to this admin's basecamp
+    // Verify the booking belongs to this admin's basecamp and fetch details
     const { data: booking } = await supabase
       .from('bookings')
-      .select('jalur_id, status, jalur_pendakian!inner(basecamp_id)')
+      .select(`
+        id,
+        status,
+        jalur_pendakian:jalur_id!inner (
+          basecamp_id
+        ),
+        anggota_rombongan (id),
+        logistik_bawaan (id)
+      `)
       .eq('id', bookingId)
       .single();
 
@@ -100,8 +121,42 @@ export async function processCheckIn(bookingId: string) {
       };
     }
 
-    // Update to CHECKED_IN status
-    const { error } = await supabase
+    // Validate that all members are verified
+    const allMemberIds = ((booking as any).anggota_rombongan || []).map((m: any) => m.id);
+    const missingMembers = allMemberIds.filter((id: string) => !verifiedMemberIds.includes(id));
+    if (missingMembers.length > 0) {
+      return {
+        success: false,
+        error: `Semua anggota rombongan harus diverifikasi. ${missingMembers.length} anggota belum dicentang.`
+      };
+    }
+
+    // Validate that all logistics are verified
+    const allLogisticsIds = ((booking as any).logistik_bawaan || []).map((l: any) => l.id);
+    const missingLogistics = allLogisticsIds.filter((id: string) => !verifiedLogisticsIds.includes(id));
+    if (missingLogistics.length > 0) {
+      return {
+        success: false,
+        error: `Semua logistik bawaan harus diverifikasi. ${missingLogistics.length} item belum dicentang.`
+      };
+    }
+
+    // Step 1: Update logistik_bawaan status_pengecekan to true
+    if (verifiedLogisticsIds.length > 0) {
+      const { error: logisticsError } = await supabase
+        .from('logistik_bawaan')
+        .update({ status_pengecekan: true })
+        .in('id', verifiedLogisticsIds)
+        .eq('booking_id', bookingId);
+
+      if (logisticsError) {
+        console.error('Error updating logistics:', logisticsError);
+        return { success: false, error: `Gagal update logistik: ${logisticsError.message}` };
+      }
+    }
+
+    // Step 2: Update booking status to CHECKED_IN
+    const { error: bookingError } = await supabase
       .from('bookings')
       .update({
         status: 'CHECKED_IN',
@@ -111,9 +166,9 @@ export async function processCheckIn(bookingId: string) {
       })
       .eq('id', bookingId);
 
-    if (error) {
-      console.error('Error processing check-in:', error);
-      return { success: false, error: error.message };
+    if (bookingError) {
+      console.error('Error processing check-in:', bookingError);
+      return { success: false, error: `Gagal update status booking: ${bookingError.message}` };
     }
 
     revalidatePath('/dashboard/admin-basecamp/scanner');
@@ -125,7 +180,12 @@ export async function processCheckIn(bookingId: string) {
   }
 }
 
-export async function processCheckOut(bookingId: string) {
+export async function processCheckOut(
+  bookingId: string,
+  beratSampah: number,
+  jenisSampah: string,
+  verifiedLogisticsIds: string[]
+) {
   try {
     const supabase = await createClient();
 
@@ -164,8 +224,44 @@ export async function processCheckOut(bookingId: string) {
       };
     }
 
-    // Update to CHECKED_OUT status
-    const { error } = await supabase
+    // Validate inputs
+    if (beratSampah < 0) {
+      return { success: false, error: 'Berat sampah tidak boleh negatif.' };
+    }
+    if (!jenisSampah.trim()) {
+      return { success: false, error: 'Jenis sampah harus diisi.' };
+    }
+
+    // Step 1: Insert laporan_sampah
+    const { error: sampahError } = await supabase
+      .from('laporan_sampah')
+      .insert({
+        booking_id: bookingId,
+        berat_sampah: beratSampah,
+        jenis_sampah: jenisSampah.trim(),
+      });
+
+    if (sampahError) {
+      console.error('Error inserting laporan_sampah:', sampahError);
+      return { success: false, error: `Gagal menyimpan laporan sampah: ${sampahError.message}` };
+    }
+
+    // Step 2: Update logistik_bawaan status_pengecekan
+    if (verifiedLogisticsIds.length > 0) {
+      const { error: logisticsError } = await supabase
+        .from('logistik_bawaan')
+        .update({ status_pengecekan: true })
+        .in('id', verifiedLogisticsIds)
+        .eq('booking_id', bookingId);
+
+      if (logisticsError) {
+        console.error('Error updating logistics:', logisticsError);
+        return { success: false, error: `Gagal update logistik: ${logisticsError.message}` };
+      }
+    }
+
+    // Step 3: Update booking status to CHECKED_OUT
+    const { error: bookingError } = await supabase
       .from('bookings')
       .update({
         status: 'CHECKED_OUT',
@@ -175,9 +271,9 @@ export async function processCheckOut(bookingId: string) {
       })
       .eq('id', bookingId);
 
-    if (error) {
-      console.error('Error processing check-out:', error);
-      return { success: false, error: error.message };
+    if (bookingError) {
+      console.error('Error processing check-out:', bookingError);
+      return { success: false, error: `Gagal update status booking: ${bookingError.message}` };
     }
 
     revalidatePath('/dashboard/admin-basecamp/scanner');
