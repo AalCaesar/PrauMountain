@@ -1,15 +1,21 @@
 import { createClient } from '@/utils/supabase/server';
 import { LayoutDashboard, Map, CalendarDays, QrCode } from 'lucide-react';
+import { redirect } from 'next/navigation';
 
 export default async function AdminBasecampDashboard() {
   const supabase = await createClient();
 
   const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    redirect('/login');
+  }
   const { data: userData } = await supabase
     .from('users')
     .select('nama_lengkap, email')
     .eq('id', user?.id)
     .single();
+
+  const displayName = userData?.nama_lengkap || user.email;
 
   return (
     <div className="space-y-6">

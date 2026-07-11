@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
   if (isAuthRoute && user) {
     // User sudah login tapi coba akses auth route -> redirect ke dashboard
     const url = request.nextUrl.clone();
-    url.pathname = '/dashboard';
+    url.pathname = '/';
     return NextResponse.redirect(url);
   }
 
