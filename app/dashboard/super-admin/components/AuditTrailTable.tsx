@@ -1,16 +1,13 @@
 'use client';
 
 import { Activity, Clock } from 'lucide-react';
+import { AuditLogEntry } from '@/app/actions/audit';
 
-const DUMMY_AUDIT_LOGS = [
-  { id: 1, waktu: '2023-11-20 14:32:00', aksi: 'Booking Dibatalkan (Expired)', pelaku: 'Sistem Cron', basecamp: 'Dieng' },
-  { id: 2, waktu: '2023-11-20 13:15:22', aksi: 'Mengubah Status Pembayaran (Manual)', pelaku: 'Admin Basecamp A', basecamp: 'Patak Banteng' },
-  { id: 3, waktu: '2023-11-20 10:05:10', aksi: 'Menambahkan Fasilitas Baru', pelaku: 'Super Admin', basecamp: 'Kalilembu' },
-  { id: 4, waktu: '2023-11-19 19:40:05', aksi: 'Menutup Jalur Sementara (Cuaca Buruk)', pelaku: 'Admin Basecamp C', basecamp: 'Wates' },
-  { id: 5, waktu: '2023-11-19 08:22:12', aksi: 'Mendaftarkan Admin Baru', pelaku: 'Super Admin', basecamp: 'Semua' },
-];
+interface AuditTrailTableProps {
+  logs: AuditLogEntry[];
+}
 
-export default function AuditTrailTable() {
+export default function AuditTrailTable({ logs }: AuditTrailTableProps) {
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
       <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
@@ -36,27 +33,34 @@ export default function AuditTrailTable() {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {DUMMY_AUDIT_LOGS.map((log) => (
-              <tr key={log.id} className="hover:bg-slate-50/80 transition-colors">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center gap-2 text-slate-500">
-                    <Clock className="w-4 h-4" />
-                    {log.waktu}
-                  </div>
+            {logs && logs.length > 0 ? (
+              logs.map((log) => (
+                <tr key={log.id} className="hover:bg-slate-50/80 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center gap-2 text-slate-500">
+                      <Clock className="w-4 h-4" />
+                      {log.waktu}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 font-medium text-slate-700">{log.aksi}</td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                      log.pelaku === 'Sistem' || log.pelaku === 'Sistem Cron' ? 'bg-slate-100 text-slate-700' : 
+                      'bg-blue-100 text-blue-700'
+                    }`}>
+                      {log.pelaku}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-slate-600">{log.basecamp}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={4} className="px-6 py-8 text-center text-slate-500">
+                  Belum ada aktivitas tercatat.
                 </td>
-                <td className="px-6 py-4 font-medium text-slate-700">{log.aksi}</td>
-                <td className="px-6 py-4">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    log.pelaku === 'Sistem Cron' ? 'bg-slate-100 text-slate-700' : 
-                    log.pelaku === 'Super Admin' ? 'bg-purple-100 text-purple-700' : 
-                    'bg-blue-100 text-blue-700'
-                  }`}>
-                    {log.pelaku}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-slate-600">{log.basecamp}</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

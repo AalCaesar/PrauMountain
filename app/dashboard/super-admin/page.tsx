@@ -11,6 +11,7 @@ import {
   Banknote
 } from 'lucide-react';
 import { getSuperAdminStats } from './actions';
+import { getRecentAuditLogs } from '@/app/actions/audit';
 import BasecampComparisonChart from './components/BasecampComparisonChart';
 import AuditTrailTable from './components/AuditTrailTable';
 
@@ -34,9 +35,11 @@ export default async function SuperAdminDashboardPage() {
   const [
     { count: totalBasecamps },
     { count: totalUsers },
+    auditLogs
   ] = await Promise.all([
     supabase.from('basecamps').select('*', { count: 'exact', head: true }),
     supabase.from('users').select('*', { count: 'exact', head: true }),
+    getRecentAuditLogs()
   ]);
 
   const statsData = await getSuperAdminStats();
@@ -109,7 +112,7 @@ export default async function SuperAdminDashboardPage() {
       <BasecampComparisonChart data={basecampPerformance} />
 
       {/* Tabel Audit Trail */}
-      <AuditTrailTable />
+      <AuditTrailTable logs={auditLogs} />
 
     </div>
   );
