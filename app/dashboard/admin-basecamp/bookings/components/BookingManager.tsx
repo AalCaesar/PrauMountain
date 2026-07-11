@@ -21,11 +21,11 @@ export default function BookingManager({ bookingsData }: BookingManagerProps) {
     return bookingsData.filter((booking) => {
       switch (activeTab) {
         case 'menunggu':
-          return booking.status === 'PENDING_PAYMENT' || booking.status === 'DRAFT';
+          return booking.status_booking === 'PENDING_PAYMENT' || booking.status_booking === 'DRAFT';
         case 'disetujui':
-          return booking.status === 'CONFIRMED' || booking.status === 'CHECKED_IN';
+          return booking.status_booking === 'CONFIRMED' || booking.status_booking === 'CHECKED_IN';
         case 'selesai':
-          return booking.status === 'CHECKED_OUT';
+          return booking.status_booking === 'CHECKED_OUT';
         default:
           return true;
       }
@@ -36,12 +36,12 @@ export default function BookingManager({ bookingsData }: BookingManagerProps) {
     return {
       semua: bookingsData.length,
       menunggu: bookingsData.filter(
-        (b) => b.status === 'PENDING_PAYMENT' || b.status === 'DRAFT'
+        (b) => b.status_booking === 'PENDING_PAYMENT' || b.status_booking === 'DRAFT'
       ).length,
       disetujui: bookingsData.filter(
-        (b) => b.status === 'CONFIRMED' || b.status === 'CHECKED_IN'
+        (b) => b.status_booking === 'CONFIRMED' || b.status_booking === 'CHECKED_IN'
       ).length,
-      selesai: bookingsData.filter((b) => b.status === 'CHECKED_OUT').length,
+      selesai: bookingsData.filter((b) => b.status_booking === 'CHECKED_OUT').length,
     };
   }, [bookingsData]);
 

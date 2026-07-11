@@ -69,6 +69,7 @@ async function getUserBookings(userId: string): Promise<Booking[]> {
       )
     `)
     .eq('user_id', userId)
+    .not('status_booking', 'in', '("CANCELLED","EXPIRED")')
     .order('created_at', { ascending: false });
 
   if (error) {

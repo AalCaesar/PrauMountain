@@ -40,6 +40,7 @@ export async function getBookings() {
         )
       `)
       .eq('jalur_pendakian.basecamp_id', basecamp.id)
+      .not('status_booking', 'in', '("CANCELLED","EXPIRED")')
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -56,7 +57,7 @@ export async function getBookings() {
 
 export async function updateBookingStatus(
   bookingId: string,
-  newStatus: 'DRAFT' | 'PENDING_PAYMENT' | 'CONFIRMED' | 'CHECKED_IN' | 'CHECKED_OUT' | 'CANCELLED' | 'EXPIRED'
+  newStatus: 'PENDING_PAYMENT' | 'CONFIRMED' | 'CHECKED_IN' | 'CHECKED_OUT' | 'CANCELLED' | 'EXPIRED'
 ) {
   try {
     const supabase = await createClient();
@@ -69,7 +70,7 @@ export async function updateBookingStatus(
     // Verify the booking belongs to this admin's basecamp
     const { data: booking } = await supabase
       .from('bookings')
-      .select('jalur_id, jalur_pendakian!inner(basecamp_id, basecamps!inner(admin_id))')
+      .select('jalur_id, status_booking, jalur_pendakian!inner(basecamp_id, basecamps!inner(admin_id))')
       .eq('id', bookingId)
       .single();
 
@@ -77,9 +78,16 @@ export async function updateBookingStatus(
       return { success: false, error: 'Unauthorized: Not your booking' };
     }
 
+    // specific validation for CANCELLED should be handled by cancelBooking, but kept here for safety if called directly
+    if (newStatus === 'CANCELLED') {
+      if (!['PENDING_PAYMENT', 'CONFIRMED'].includes((booking as any).status_booking)) {
+        return { success: false, error: 'Aksi tidak diizinkan untuk status booking ini' };
+      }
+    }
+
     // Update the booking status
     const updateData: any = {
-      status: newStatus,
+      status_booking: newStatus,
       updated_at: new Date().toISOString(),
     };
 
@@ -107,6 +115,63 @@ export async function updateBookingStatus(
 
     if (error) {
       console.error('Error updating booking status:', error);
+      if (error.code === '23514') { // Check constraint violation
+        return { success: false, error: 'Aksi tidak diizinkan untuk status booking ini' };
+      }
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath('/dashboard/admin-basecamp/bookings');
+    return { success: true };
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    return { success: false, error: 'An unexpected error occurred' };
+  }
+}
+
+export async function cancelBooking(bookingId: string) {
+  try {
+    const supabase = await createClient();
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return { success: false, error: 'Not authenticated' };
+    }
+
+    // Verify the booking belongs to this admin's basecamp and get current status
+    const { data: booking } = await supabase
+      .from('bookings')
+      .select('status_booking, jalur_pendakian!inner(basecamps!inner(admin_id))')
+      .eq('id', bookingId)
+      .single();
+
+    if (!booking || (booking as any).jalur_pendakian.basecamps.admin_id !== user.id) {
+      return { success: false, error: 'Unauthorized: Not your booking' };
+    }
+
+    // specific validation for CANCELLED
+    if (!['PENDING_PAYMENT', 'CONFIRMED'].includes((booking as any).status_booking)) {
+      return { success: false, error: 'Aksi tidak diizinkan untuk status booking ini' };
+    }
+
+    // Update the booking status
+    const updateData = {
+      status_booking: 'CANCELLED',
+      cancelled_at: new Date().toISOString(),
+      cancelled_by: user.id,
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error } = await supabase
+      .from('bookings')
+      .update(updateData)
+      .eq('id', bookingId);
+
+    if (error) {
+      console.error('Error cancelling booking:', error);
+      if (error.code === '23514') { // Check constraint violation
+        return { success: false, error: 'Aksi tidak diizinkan untuk status booking ini' };
+      }
       return { success: false, error: error.message };
     }
 

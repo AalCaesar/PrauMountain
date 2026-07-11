@@ -537,10 +537,10 @@ export default function BookingResult({ booking, onReset }: BookingResultProps) 
     setError(msg);
   };
 
-  const canCheckIn = booking.status === 'CONFIRMED' && booking.paid_at;
-  const canCheckOut = booking.status === 'CHECKED_IN';
+  const canCheckIn = booking.status_booking === 'CONFIRMED' && booking.paid_at;
+  const canCheckOut = booking.status_booking === 'CHECKED_IN';
   const isPaymentPending = !booking.paid_at;
-  const isCancelled = booking.status === 'CANCELLED';
+  const isCancelled = booking.status_booking === 'CANCELLED';
 
   return (
     <>
@@ -574,7 +574,7 @@ export default function BookingResult({ booking, onReset }: BookingResultProps) 
                 Kode: <span className="font-mono font-semibold">{booking.kode_booking || shortenId(booking.id)}</span>
               </p>
             </div>
-            {getBookingStatusBadge(booking.status)}
+            {getBookingStatusBadge(booking.status_booking)}
           </div>
         </div>
 

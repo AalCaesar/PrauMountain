@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Calendar, Users, CreditCard, Eye, Check, X, Loader2, Clock } from 'lucide-react';
-import { updateBookingStatus } from '../actions';
+import { updateBookingStatus, cancelBooking } from '../actions';
 
 interface BookingTableProps {
   bookings: any[];
@@ -52,7 +52,7 @@ export default function BookingTable({ bookings }: BookingTableProps) {
       CONFIRMED: { label: 'Disetujui', className: 'bg-blue-100 text-blue-800' },
       CHECKED_IN: { label: 'Check-in', className: 'bg-indigo-100 text-indigo-800' },
       CHECKED_OUT: { label: 'Selesai', className: 'bg-green-100 text-green-800' },
-      CANCELLED: { label: 'Ditolak', className: 'bg-red-100 text-red-800' },
+      CANCELLED: { label: 'Ditolak/Batal', className: 'bg-red-100 text-red-800' },
       EXPIRED: { label: 'Kadaluarsa', className: 'bg-gray-100 text-gray-800' },
     };
 
@@ -82,20 +82,37 @@ export default function BookingTable({ bookings }: BookingTableProps) {
     }
   };
 
+  const handleCancel = async (bookingId: string) => {
+    setLoadingId(bookingId);
+    try {
+      const result = await cancelBooking(bookingId);
+      if (result.success) {
+        // Success - revalidation will update the UI
+      } else {
+        alert(`Gagal membatalkan booking: ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Error cancelling booking:', error);
+      alert('Terjadi kesalahan saat membatalkan booking');
+    } finally {
+      setLoadingId(null);
+    }
+  };
+
   const canApprove = (booking: any) => {
-    return booking.status === 'PENDING_PAYMENT' && booking.paid_at;
+    return booking.status_booking === 'PENDING_PAYMENT' && booking.paid_at;
   };
 
   const canCancel = (booking: any) => {
-    return ['DRAFT', 'PENDING_PAYMENT', 'CONFIRMED'].includes(booking.status);
+    return ['PENDING_PAYMENT', 'CONFIRMED'].includes(booking.status_booking);
   };
 
   const canCheckIn = (booking: any) => {
-    return booking.status === 'CONFIRMED';
+    return booking.status_booking === 'CONFIRMED';
   };
 
   const canCheckOut = (booking: any) => {
-    return booking.status === 'CHECKED_IN';
+    return booking.status_booking === 'CHECKED_IN';
   };
 
   if (bookings.length === 0) {
@@ -183,7 +200,7 @@ export default function BookingTable({ bookings }: BookingTableProps) {
                 {getPaymentStatusBadge(booking.paid_at)}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                {getBookingStatusBadge(booking.status)}
+                {getBookingStatusBadge(booking.status_booking)}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <div className="flex items-center justify-end gap-2">
@@ -221,9 +238,9 @@ export default function BookingTable({ bookings }: BookingTableProps) {
                       )}
                       {canCancel(booking) && (
                         <button
-                          onClick={() => handleStatusChange(booking.id, 'CANCELLED')}
+                          onClick={() => handleCancel(booking.id)}
                           className="inline-flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-50 rounded hover:bg-red-100 transition-colors"
-                          title="Tolak"
+                          title="Tolak/Batal"
                         >
                           <X className="h-3 w-3 mr-1" />
                           Tolak

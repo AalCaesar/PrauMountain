@@ -99,7 +99,7 @@ export async function processCheckIn(
       .from('bookings')
       .select(`
         id,
-        status,
+        status_booking,
         jalur_pendakian:jalur_id!inner (
           basecamp_id
         ),
@@ -114,10 +114,10 @@ export async function processCheckIn(
     }
 
     // Check if booking is in CONFIRMED status
-    if ((booking as any).status !== 'CONFIRMED') {
+    if ((booking as any).status_booking !== 'CONFIRMED') {
       return {
         success: false,
-        error: `Cannot check-in. Current status: ${(booking as any).status}. Booking must be CONFIRMED first.`
+        error: `Cannot check-in. Current status: ${(booking as any).status_booking}. Booking must be CONFIRMED first.`
       };
     }
 
@@ -159,7 +159,7 @@ export async function processCheckIn(
     const { error: bookingError } = await supabase
       .from('bookings')
       .update({
-        status: 'CHECKED_IN',
+        status_booking: 'CHECKED_IN',
         checked_in_at: new Date().toISOString(),
         checked_in_by: user.id,
         updated_at: new Date().toISOString(),
@@ -208,7 +208,7 @@ export async function processCheckOut(
     // Verify the booking belongs to this admin's basecamp
     const { data: booking } = await supabase
       .from('bookings')
-      .select('jalur_id, status, jalur_pendakian!inner(basecamp_id)')
+      .select('jalur_id, status_booking, jalur_pendakian!inner(basecamp_id)')
       .eq('id', bookingId)
       .single();
 
@@ -217,10 +217,10 @@ export async function processCheckOut(
     }
 
     // Check if booking is in CHECKED_IN status
-    if ((booking as any).status !== 'CHECKED_IN') {
+    if ((booking as any).status_booking !== 'CHECKED_IN') {
       return {
         success: false,
-        error: `Cannot check-out. Current status: ${(booking as any).status}. Booking must be CHECKED_IN first.`
+        error: `Cannot check-out. Current status: ${(booking as any).status_booking}. Booking must be CHECKED_IN first.`
       };
     }
 
@@ -264,7 +264,7 @@ export async function processCheckOut(
     const { error: bookingError } = await supabase
       .from('bookings')
       .update({
-        status: 'CHECKED_OUT',
+        status_booking: 'CHECKED_OUT',
         checked_out_at: new Date().toISOString(),
         checked_out_by: user.id,
         updated_at: new Date().toISOString(),
