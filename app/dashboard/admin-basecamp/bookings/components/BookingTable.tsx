@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Calendar, Users, CreditCard, Eye, Check, X, Loader2, Clock } from 'lucide-react';
+import { Calendar, Users, CreditCard, Eye, Check, X, Loader2, Clock, MapPin, Package, FileText } from 'lucide-react';
 import { updateBookingStatus, cancelBooking } from '../actions';
 
 interface BookingTableProps {
@@ -10,13 +10,22 @@ interface BookingTableProps {
 
 export default function BookingTable({ bookings }: BookingTableProps) {
   const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [selectedBooking, setSelectedBooking] = useState<any | null>(null);
+
+  const formatDateSafe = (dateString: string | undefined | null) => {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return '-';
+    return date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
   };
 
-  const formatPrice = (price: number) => {
+  const formatPriceSafe = (price: number | undefined | null) => {
+    if (price === undefined || price === null || isNaN(price)) return 'Rp 0';
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
       currency: 'IDR',
@@ -176,24 +185,20 @@ export default function BookingTable({ bookings }: BookingTableProps) {
                 <div className="text-xs text-gray-500">{booking.users?.email}</div>
               </td>
               <td className="px-6 py-4">
-                <div className="text-sm font-medium text-gray-900">
-                  {booking.jalur_pendakian?.nama_jalur || 'N/A'}
-                </div>
-                <div className="flex items-center gap-1 text-xs text-gray-500 mt-1">
-                  <Calendar className="h-3 w-3" />
-                  {formatDate(booking.tanggal_pendakian)}
+                <div className="text-sm font-medium text-gray-900 break-words max-w-xs">
+                  {booking.jalur_pendakian?.nama_jalur || 'N/A'} | {formatDateSafe(booking.tanggal_naik)} - {formatDateSafe(booking.tanggal_turun)}
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex items-center gap-1 text-sm text-gray-900">
                   <Users className="h-4 w-4 text-gray-400" />
-                  {booking.jumlah_anggota} orang
+                  {booking.total_anggota || 0} orang
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex items-center gap-1 text-sm font-medium text-gray-900">
                   <CreditCard className="h-4 w-4 text-gray-400" />
-                  {formatPrice(booking.total_harga)}
+                  {formatPriceSafe(booking.total_biaya)}
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
@@ -247,6 +252,7 @@ export default function BookingTable({ bookings }: BookingTableProps) {
                         </button>
                       )}
                       <button
+                        onClick={() => setSelectedBooking(booking)}
                         className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
                         title="Lihat Detail"
                       >
@@ -260,6 +266,173 @@ export default function BookingTable({ bookings }: BookingTableProps) {
           ))}
         </tbody>
       </table>
+
+      {/* MODAL DETAIL BOOKING */}
+      {selectedBooking && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col my-8">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-emerald-50 rounded-lg">
+                  <FileText className="h-6 w-6 text-emerald-600" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">Detail Booking</h2>
+                  <p className="text-sm text-gray-500 font-mono">{selectedBooking?.kode_booking || shortenId(selectedBooking.id)}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setSelectedBooking(null)}
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="p-6 overflow-y-auto space-y-8">
+              {/* Info Utama */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="p-4 bg-gray-50 rounded-xl">
+                  <p className="text-sm text-gray-500 mb-1">Status</p>
+                  <div>{getBookingStatusBadge(selectedBooking?.status_booking)}</div>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-xl">
+                  <p className="text-sm text-gray-500 mb-1">Tanggal</p>
+                  <p className="font-semibold text-gray-900 text-sm">
+                    {formatDateSafe(selectedBooking?.tanggal_naik)} - {formatDateSafe(selectedBooking?.tanggal_turun)}
+                  </p>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-xl">
+                  <p className="text-sm text-gray-500 mb-1">Total Biaya</p>
+                  <p className="font-semibold text-gray-900">
+                    {formatPriceSafe(selectedBooking?.total_biaya)}
+                  </p>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-xl">
+                  <p className="text-sm text-gray-500 mb-1">Total Anggota</p>
+                  <p className="font-semibold text-gray-900">
+                    {selectedBooking?.total_anggota || 0} orang
+                  </p>
+                </div>
+              </div>
+
+              {/* Info Ketua */}
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <Users className="h-5 w-5 text-emerald-600" />
+                  Informasi Ketua Rombongan
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border border-gray-100 rounded-xl bg-white shadow-sm">
+                  <div>
+                    <p className="text-sm text-gray-500">Nama Lengkap</p>
+                    <p className="font-medium text-gray-900">{selectedBooking?.users?.nama_lengkap || '-'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Email</p>
+                    <p className="font-medium text-gray-900 break-all">{selectedBooking?.users?.email || '-'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Nomor HP</p>
+                    <p className="font-medium text-gray-900">{selectedBooking?.users?.nomor_hp || '-'}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tabel Anggota */}
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <Users className="h-5 w-5 text-emerald-600" />
+                  Daftar Anggota
+                </h3>
+                <div className="overflow-hidden border border-gray-200 rounded-xl">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Anggota</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIK</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kontak Darurat</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {(selectedBooking?.anggota_rombongan || []).length > 0 ? (
+                        selectedBooking.anggota_rombongan.map((anggota: any, idx: number) => (
+                          <tr key={anggota.id} className="hover:bg-gray-50">
+                            <td className="px-4 py-3 text-sm text-gray-500">{idx + 1}</td>
+                            <td className="px-4 py-3 text-sm font-medium text-gray-900">{anggota.nama_anggota}</td>
+                            <td className="px-4 py-3 text-sm text-gray-500 font-mono">{anggota.nik}</td>
+                            <td className="px-4 py-3 text-sm text-gray-500">{anggota.kontak_darurat}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={4} className="px-4 py-6 text-center text-sm text-gray-500">
+                            Tidak ada data anggota
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Tabel Logistik */}
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <Package className="h-5 w-5 text-emerald-600" />
+                  Logistik Bawaan
+                </h3>
+                <div className="overflow-hidden border border-gray-200 rounded-xl">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Barang</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Dibawa</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status Cek</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {(selectedBooking?.logistik_bawaan || []).length > 0 ? (
+                        selectedBooking.logistik_bawaan.map((logistik: any) => (
+                          <tr key={logistik.id} className="hover:bg-gray-50">
+                            <td className="px-4 py-3 text-sm font-medium text-gray-900">{logistik.nama_barang}</td>
+                            <td className="px-4 py-3 text-sm text-gray-500">{logistik.jumlah_dibawa}</td>
+                            <td className="px-4 py-3 text-sm">
+                              {logistik.status_pengecekan ? (
+                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">Sesuai</span>
+                              ) : (
+                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">Belum Dicek</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={3} className="px-4 py-6 text-center text-sm text-gray-500">
+                            Tidak ada data logistik
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            
+            {/* Footer */}
+            <div className="p-6 border-t border-gray-100 bg-gray-50 rounded-b-2xl flex justify-end">
+              <button
+                onClick={() => setSelectedBooking(null)}
+                className="px-6 py-2 bg-white border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors shadow-sm"
+              >
+                Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

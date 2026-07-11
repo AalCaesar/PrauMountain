@@ -82,6 +82,7 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
 
   const [currentStep, setCurrentStep] = useState(1);
   const [hikingDate, setHikingDate] = useState('');
+  const [hikingReturnDate, setHikingReturnDate] = useState('');
   const [hikerCount, setHikerCount] = useState(1);
   const [hikerDetails, setHikerDetails] = useState<HikerDetail[]>([
     { namaLengkap: '', nik: '', nomorTelepon: '' }
@@ -124,6 +125,11 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
 
     if (!hikingDate) {
       newErrors.hikingDate = 'Tanggal pendakian wajib diisi';
+    }
+    if (!hikingReturnDate) {
+      newErrors.hikingReturnDate = 'Tanggal turun wajib diisi';
+    } else if (hikingDate && new Date(hikingReturnDate) < new Date(hikingDate)) {
+      newErrors.hikingReturnDate = 'Tanggal turun tidak boleh sebelum tanggal naik';
     }
 
     hikerDetails.forEach((hiker, index) => {
@@ -202,7 +208,7 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
         ketua_id: user.id,
         jalur_id: trail.id,
         tanggal_naik: hikingDate,
-        tanggal_turun: hikingDate,
+        tanggal_turun: hikingReturnDate,
         total_anggota: hikerCount,
         total_biaya: totalPrice,
         status_booking: 'PENDING_PAYMENT',
@@ -329,6 +335,34 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
                     <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
                       <AlertCircle className="h-4 w-4" />
                       {errors.hikingDate}
+                    </p>
+                  )}
+                </div>
+
+                <div className="mt-6">
+                  <label htmlFor="hikingReturnDate" className="block text-sm font-medium text-gray-700 mb-2">
+                    Tanggal Turun <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    id="hikingReturnDate"
+                    value={hikingReturnDate}
+                    min={hikingDate || getTodayDate()}
+                    onChange={(e) => {
+                      setHikingReturnDate(e.target.value);
+                      if (errors.hikingReturnDate) {
+                        const newErrors = { ...errors };
+                        delete newErrors.hikingReturnDate;
+                        setErrors(newErrors);
+                      }
+                    }}
+                    className={`w-full min-h-[44px] px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${errors.hikingReturnDate ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                  />
+                  {errors.hikingReturnDate && (
+                    <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                      <AlertCircle className="h-4 w-4" />
+                      {errors.hikingReturnDate}
                     </p>
                   )}
                 </div>
@@ -470,6 +504,7 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
               trail={trail}
               basecamp={basecamp}
               hikingDate={hikingDate}
+              hikingReturnDate={hikingReturnDate}
               hikerCount={hikerCount}
               hikerDetails={hikerDetails}
               logistics={logistics}
@@ -504,7 +539,11 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
                   <p className="text-gray-500">Tanggal Pendakian</p>
                   <p className="font-semibold text-gray-900">
                     {hikingDate ? new Date(hikingDate).toLocaleDateString('id-ID', {
-                      day: 'numeric', month: 'long', year: 'numeric'
+                      day: 'numeric', month: 'short', year: 'numeric'
+                    }) : '-'} 
+                    {' - '}
+                    {hikingReturnDate ? new Date(hikingReturnDate).toLocaleDateString('id-ID', {
+                      day: 'numeric', month: 'short', year: 'numeric'
                     }) : '-'}
                   </p>
                 </div>

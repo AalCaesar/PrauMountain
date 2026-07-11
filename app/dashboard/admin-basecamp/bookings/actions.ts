@@ -36,8 +36,11 @@ export async function getBookings() {
         ),
         users:user_id (
           nama_lengkap,
-          email
-        )
+          email,
+          nomor_hp
+        ),
+        anggota_rombongan (*),
+        logistik_bawaan (*)
       `)
       .eq('jalur_pendakian.basecamp_id', basecamp.id)
       .not('status_booking', 'in', '("CANCELLED","EXPIRED")')

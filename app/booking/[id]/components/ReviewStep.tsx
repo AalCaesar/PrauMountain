@@ -34,6 +34,7 @@ interface ReviewStepProps {
   trail: Trail;
   basecamp: Basecamp;
   hikingDate: string;
+  hikingReturnDate?: string;
   hikerCount: number;
   hikerDetails: HikerDetail[];
   logistics: LogistikState;
@@ -56,6 +57,7 @@ export default function ReviewStep({
   trail,
   basecamp,
   hikingDate,
+  hikingReturnDate,
   hikerCount,
   hikerDetails,
   logistics,
@@ -117,7 +119,10 @@ export default function ReviewStep({
               <Calendar className="h-4 w-4" />
               Tanggal Pendakian
             </span>
-            <span className="font-semibold text-gray-900">{formatDate(hikingDate)}</span>
+            <span className="font-semibold text-gray-900">
+              {formatDate(hikingDate)} 
+              {hikingReturnDate && ` - ${formatDate(hikingReturnDate)}`}
+            </span>
           </div>
         </div>
       </div>
