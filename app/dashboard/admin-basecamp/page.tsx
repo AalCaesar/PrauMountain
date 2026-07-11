@@ -3,8 +3,10 @@ import { LayoutDashboard, Map, CalendarDays, QrCode } from 'lucide-react';
 import { redirect } from 'next/navigation';
 import { getDashboardStats } from './actions';
 import { getAdminQuotaStats } from '@/app/actions/quota';
+import { getOverdueHikers } from '@/app/actions/emergency';
 import DashboardStats from './components/DashboardStats';
 import QuotaCapacity from './components/QuotaCapacity';
+import OverdueAlertWidget from './components/OverdueAlertWidget';
 
 export default async function AdminBasecampDashboard() {
   const supabase = await createClient();
@@ -24,7 +26,7 @@ export default async function AdminBasecampDashboard() {
   const statsResponse = await getDashboardStats();
   const stats = statsResponse.success ? statsResponse.data : null;
 
-  // Ambil basecamp_id untuk query kuota
+  // Ambil basecamp_id untuk query kuota & emergency
   const { data: basecamp } = await supabase
     .from('basecamps')
     .select('id')
@@ -32,12 +34,17 @@ export default async function AdminBasecampDashboard() {
     .single();
 
   let quotaStats = null;
+  let overdueHikers: any[] = [];
   if (basecamp) {
     quotaStats = await getAdminQuotaStats(basecamp.id);
+    overdueHikers = await getOverdueHikers(basecamp.id);
   }
 
   return (
     <div className="space-y-6">
+      {/* Emergency Alert Widget */}
+      <OverdueAlertWidget overdueHikers={overdueHikers} />
+
       {/* Welcome Section */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">

@@ -31,9 +31,9 @@
 - ✅ Rombak UI/UX Global (Premium Styling Tailwind, Typografi Plus Jakarta Sans, Image Optimization)
 - ✅ Filter pencarian real-time Basecamp di Landing Page
 - ✅ Manajemen & Validasi Kuota Harian Real-time (Sisi Pendaki & Admin)
+- ✅ Protokol Eskalasi Darurat (Overdue Hikers Alert) di Dasbor Admin
 
 **Still Pending:**
-- ❌ Eskalasi darurat jika ada pendaki hilang
 - ❌ Statistik kepatuhan SOP & KPI Basecamp
 - ❌ Super Admin laporan per basecamp & audit trail
 - ❌ Seluruh Phase 4 - Testing & QA (16 tasks)
@@ -150,7 +150,7 @@
 - [x] Form input data sampah (berat, jenis) → insert ke tabel laporan_sampah
 - [x] Checklist peralatan yang dibawa turun (logistik verification di modal)
 - [x] Update status booking ke CHECKED_OUT
-- [ ] Eskalasi darurat jika ada pendaki hilang
+- [x] Eskalasi darurat jika ada pendaki hilang (Overdue Hikers Alert)
 
 #### Laporan & Statistik
 - [x] Laporan booking per periode
