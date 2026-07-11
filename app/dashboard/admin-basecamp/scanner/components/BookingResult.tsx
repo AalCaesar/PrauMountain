@@ -649,21 +649,25 @@ export default function BookingResult({ booking, onReset }: BookingResultProps) 
                   <Calendar className="h-4 w-4 text-gray-400" />
                   <div>
                     <p className="text-xs text-gray-500">Tanggal</p>
-                    <p className="text-sm font-medium text-gray-900">{formatDate(booking.tanggal_pendakian)}</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      {booking.tanggal_naik ? `${formatDate(booking.tanggal_naik)} - ${formatDate(booking.tanggal_turun)}` : formatDate(booking.tanggal_pendakian)}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4 text-gray-400" />
                   <div>
                     <p className="text-xs text-gray-500">Jumlah</p>
-                    <p className="text-sm font-medium text-gray-900">{booking.jumlah_anggota} orang</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      {booking.total_anggota || ((booking.anggota_rombongan?.length || 0) + 1)} orang
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <CreditCard className="h-4 w-4 text-gray-400" />
                   <div>
                     <p className="text-xs text-gray-500">Total</p>
-                    <p className="text-sm font-semibold text-gray-900">{formatPrice(booking.total_harga)}</p>
+                    <p className="text-sm font-semibold text-gray-900">{formatPrice(booking.total_biaya || booking.total_harga || 0)}</p>
                   </div>
                 </div>
               </div>

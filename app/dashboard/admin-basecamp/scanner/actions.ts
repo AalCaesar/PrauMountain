@@ -36,15 +36,8 @@ export async function getBookingByCode(kode_booking: string) {
           nama_lengkap,
           email
         ),
-        anggota_rombongan (
-          id,
-          nama_anggota
-        ),
-        logistik_bawaan (
-          id,
-          nama_barang,
-          status_pengecekan
-        )
+        anggota_rombongan (*),
+        logistik_bawaan (*)
       `)
       .eq('kode_booking', kode_booking)
       .single();
