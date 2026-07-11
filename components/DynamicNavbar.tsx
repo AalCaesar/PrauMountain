@@ -70,7 +70,7 @@ export default function DynamicNavbar() {
 
           <div className="hidden md:flex items-center gap-6">
             <Link
-              href="/basecamps"
+              href="/#jelajahi"
               className={`text-sm font-medium transition-colors hover:text-emerald-500 ${shouldBeSolid ? 'text-gray-700' : 'text-white/90'
                 }`}
             >
@@ -150,7 +150,7 @@ export default function DynamicNavbar() {
         <div className="md:hidden bg-white border-t border-gray-200">
           <div className="px-4 py-4 space-y-3">
             <Link
-              href="/basecamps"
+              href="/#jelajahi"
               className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >

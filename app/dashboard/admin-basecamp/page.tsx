@@ -1,6 +1,8 @@
 import { createClient } from '@/utils/supabase/server';
 import { LayoutDashboard, Map, CalendarDays, QrCode } from 'lucide-react';
 import { redirect } from 'next/navigation';
+import { getDashboardStats } from './actions';
+import DashboardStats from './components/DashboardStats';
 
 export default async function AdminBasecampDashboard() {
   const supabase = await createClient();
@@ -16,6 +18,9 @@ export default async function AdminBasecampDashboard() {
     .single();
 
   const displayName = userData?.nama_lengkap || user.email;
+
+  const statsResponse = await getDashboardStats();
+  const stats = statsResponse.success ? statsResponse.data : null;
 
   return (
     <div className="space-y-6">
@@ -80,6 +85,9 @@ export default async function AdminBasecampDashboard() {
           </p>
         </div>
       </div>
+
+      {/* Dashboard Stats Section */}
+      <DashboardStats stats={stats} />
 
       {/* Info Section */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">

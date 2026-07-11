@@ -37,7 +37,7 @@ const navigationItems: NavItem[] = [
   },
   {
     name: 'Scanner / Check-in',
-    href: '/dashboard/admin-basecamp/check-in',
+    href: '/dashboard/admin-basecamp/scanner',
     icon: QrCode,
   },
   {

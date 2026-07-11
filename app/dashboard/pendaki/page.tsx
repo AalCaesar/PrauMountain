@@ -177,7 +177,7 @@ export default async function PendakiDashboard() {
               </p>
             </div>
             <Link
-              href="/"
+              href="/#jelajahi"
               className="px-4 py-2 md:px-6 md:py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-medium transition-colors flex items-center justify-center gap-2 shadow-lg hover:shadow-xl text-sm md:text-base"
             >
               <Mountain className="h-4 w-4 md:h-5 md:w-5" />
@@ -266,7 +266,7 @@ export default async function PendakiDashboard() {
               Anda belum pernah melakukan booking pendakian. Mulai petualangan Anda dengan memilih gunung dan jalur favorit!
             </p>
             <Link
-              href="/"
+              href="/#jelajahi"
               className="inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all text-sm md:text-base"
             >
               <Mountain className="h-5 w-5" />

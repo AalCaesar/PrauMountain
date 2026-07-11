@@ -109,7 +109,7 @@ export default async function Home() {
                   />
                 </div>
                 <Link
-                  href="/basecamps"
+                  href="/#jelajahi"
                   className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
                 >
                   <span>Jelajahi</span>
@@ -138,7 +138,7 @@ export default async function Home() {
       </section>
 
       {/* Featured Basecamps Section */}
-      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+      <section id="jelajahi" className="py-20 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="text-center mb-16">
@@ -232,7 +232,7 @@ export default async function Home() {
               <h3 className="font-semibold mb-4">Navigasi</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
-                  <Link href="/basecamps" className="hover:text-emerald-400 transition-colors">
+                  <Link href="/#jelajahi" className="hover:text-emerald-400 transition-colors">
                     Jelajahi Basecamp
                   </Link>
                 </li>
