@@ -32,9 +32,13 @@ export async function getComplianceStats(basecamp_id: string): Promise<Complianc
     let patuhSampah = 0;
     let pelanggaranSampah = 0;
 
+    console.log("Debug Data Sampah:", bookingsSampah);
+
     if (bookingsSampah) {
       bookingsSampah.forEach((b: any) => {
-        if (b.laporan_sampah && b.laporan_sampah.length > 0) {
+        if (b.laporan_sampah && Array.isArray(b.laporan_sampah) && b.laporan_sampah.length > 0) {
+          patuhSampah++;
+        } else if (b.laporan_sampah && !Array.isArray(b.laporan_sampah) && Object.keys(b.laporan_sampah).length > 0) {
           patuhSampah++;
         } else {
           pelanggaranSampah++;
