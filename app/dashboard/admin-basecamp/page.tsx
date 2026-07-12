@@ -10,6 +10,8 @@ import QuotaCapacity from './components/QuotaCapacity';
 import OverdueAlertWidget from './components/OverdueAlertWidget';
 import SopComplianceChart from './components/SopComplianceChart';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminBasecampDashboard() {
   const supabase = await createClient();
 
