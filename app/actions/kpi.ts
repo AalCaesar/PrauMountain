@@ -13,10 +13,10 @@ export async function getComplianceStats(basecamp_id: string): Promise<Complianc
   try {
     const supabase = await createClient();
 
-    // 1. KPI Sampah (Berdasarkan booking yang CHECKED_OUT)
+
     const { data: bookingsSampah, error: errorSampah } = await supabase
       .from('bookings')
-      .select('id, status_booking, jalur_pendakian!inner(basecamp_id), laporan_sampah(id)')
+      .select('id, jalur_pendakian!inner(basecamp_id)')
       .eq('status_booking', 'CHECKED_OUT')
       .eq('jalur_pendakian.basecamp_id', basecamp_id);
 
@@ -28,22 +28,24 @@ export async function getComplianceStats(basecamp_id: string): Promise<Complianc
     let patuhSampah = 0;
     let pelanggaranSampah = 0;
 
-    console.log('DEBUG BOOKINGS:', JSON.stringify(bookingsSampah, null, 2));
+    if (bookingsSampah && bookingsSampah.length > 0) {
+      const bookingIds = bookingsSampah.map(b => b.id);
 
-    if (bookingsSampah) {
-      bookingsSampah.forEach((booking: any) => {
-        // Cek apakah laporan_sampah ada, berupa array, dan isinya tidak kosong
-        const adaSampah = booking.laporan_sampah && Array.isArray(booking.laporan_sampah) && booking.laporan_sampah.length > 0;
-        
-        if (adaSampah) {
-          patuhSampah++;
-        } else {
-          pelanggaranSampah++;
-        }
-      });
+      const { data: laporanSampah, error: errorLaporan } = await supabase
+        .from('laporan_sampah')
+        .select('booking_id')
+        .in('booking_id', bookingIds);
+
+      if (errorLaporan) {
+        console.error('Error fetching laporan sampah KPI:', errorLaporan);
+        return null;
+      }
+
+      const uniquePatuhIds = new Set(laporanSampah?.map(l => l.booking_id));
+      patuhSampah = uniquePatuhIds.size;
+      pelanggaranSampah = bookingsSampah.length - patuhSampah;
     }
 
-    // 2. KPI Logistik (Total item logistik bawaan untuk basecamp ini)
     const { data: logistik, error: errorLogistik } = await supabase
       .from('logistik_bawaan')
       .select(`
