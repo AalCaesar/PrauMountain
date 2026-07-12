@@ -271,6 +271,7 @@ export async function processCheckOut(
 
     revalidatePath('/dashboard/admin-basecamp/scanner');
     revalidatePath('/dashboard/admin-basecamp/bookings');
+    revalidatePath('/dashboard/admin-basecamp');
     return { success: true };
   } catch (error) {
     console.error('Unexpected error:', error);

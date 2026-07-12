@@ -24,13 +24,10 @@ export async function getOverdueHikers(basecamp_id: string): Promise<OverdueHike
   const { data: bookings, error } = await supabase
     .from('bookings')
     .select(`
-      id,
-      kode_booking,
-      tanggal_turun,
-      ketua_id,
+      *,
       jalur_pendakian!inner(nama_jalur, basecamp_id),
       anggota_rombongan(nama_anggota, kontak_darurat, nik),
-      users!bookings_ketua_id_fkey(nama_lengkap, nomor_telepon)
+      users!bookings_ketua_id_fkey(nama_lengkap, nomor_hp)
     `)
     .eq('status_booking', 'CHECKED_IN')
     .eq('jalur_pendakian.basecamp_id', basecamp_id)
@@ -51,7 +48,7 @@ export async function getOverdueHikers(basecamp_id: string): Promise<OverdueHike
     const ketuaFromAnggota = booking.anggota_rombongan?.[0];
 
     let ketua_nama = booking.users?.nama_lengkap || ketuaFromAnggota?.nama_anggota || 'Tidak Diketahui';
-    let telepon_ketua = booking.users?.nomor_telepon || 'Tidak Diketahui';
+    let telepon_ketua = booking.users?.nomor_hp || 'Tidak Diketahui';
     let kontak_darurat = ketuaFromAnggota?.kontak_darurat || 'Tidak Diketahui';
 
     return {
