@@ -338,8 +338,8 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
     <form onSubmit={handleSubmit}>
       <Stepper currentStep={currentStep} steps={steps} />
 
-      <div className={currentStep === 1 ? "flex flex-col lg:grid lg:grid-cols-3 gap-6 lg:gap-8" : "max-w-4xl mx-auto w-full"}>
-        <div className={currentStep === 1 ? "lg:col-span-2 order-2 lg:order-1" : "w-full"}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 order-2 lg:order-1">
           {/* Step 1: Data Pendaki */}
           {currentStep === 1 && (
             <div className="space-y-8">
@@ -518,6 +518,17 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
                   </div>
                 ))}
               </div>
+
+              {/* Navigation Buttons */}
+              <div className="flex justify-end pt-6">
+                <button
+                  type="submit"
+                  disabled={sisaSaatIni !== null && sisaSaatIni < 0}
+                  className="w-full sm:w-auto min-h-[44px] px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-colors shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Lanjut ke Logistik
+                </button>
+              </div>
             </div>
           )}
 
@@ -549,64 +560,54 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
         </div>
 
         {/* Order Summary */}
-        {currentStep === 1 && (
-          <div className="lg:col-span-1 order-1 lg:order-2">
-            <div className="lg:sticky lg:top-24 bg-white rounded-2xl border-2 border-emerald-500 shadow-lg p-4 md:p-6 space-y-4">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-emerald-50 rounded-lg">
-                  <CreditCard className="h-5 w-5 text-emerald-600" />
-                </div>
-                <h3 className="text-lg font-bold text-gray-900">Ringkasan Pesanan</h3>
+        <div className="lg:col-span-1 order-1 lg:order-2">
+          <div className="lg:sticky lg:top-24 bg-white rounded-2xl border-2 border-emerald-500 shadow-lg p-6 sm:p-8 space-y-4">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-emerald-50 rounded-lg">
+                <CreditCard className="h-5 w-5 text-emerald-600" />
               </div>
+              <h3 className="text-lg font-bold text-gray-900">Ringkasan Pesanan</h3>
+            </div>
 
-              <div className="space-y-3 text-sm">
-                <div>
-                  <p className="text-gray-500">Gunung</p>
-                  <p className="font-semibold text-gray-900 break-words">{basecamp.nama_gunung}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500">Jalur</p>
-                  <p className="font-semibold text-gray-900 break-words">{trail.nama_jalur}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500">Tanggal Pendakian</p>
-                  <p className="font-semibold text-gray-900">
-                    {hikingDate ? new Date(hikingDate).toLocaleDateString('id-ID', {
-                      day: 'numeric', month: 'short', year: 'numeric'
-                    }) : '-'} 
-                    {' - '}
-                    {hikingReturnDate ? new Date(hikingReturnDate).toLocaleDateString('id-ID', {
-                      day: 'numeric', month: 'short', year: 'numeric'
-                    }) : '-'}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-gray-500">Jumlah Pendaki</p>
-                  <p className="font-semibold text-gray-900">{hikerCount} orang</p>
-                </div>
+            <div className="space-y-3 text-sm">
+              <div>
+                <p className="text-gray-500">Gunung</p>
+                <p className="font-semibold text-gray-900 break-words">{basecamp.nama_gunung}</p>
               </div>
-
-              <div className="border-t border-gray-200 pt-4 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Harga per orang</span>
-                  <span className="font-medium text-gray-900 break-words">{formatPrice(trail.harga_per_orang)}</span>
-                </div>
-                <div className="flex justify-between items-center pt-2">
-                  <span className="text-lg font-bold text-gray-900">Total</span>
-                  <span className="text-xl sm:text-2xl font-bold text-emerald-600 break-words">{formatPrice(totalPrice)}</span>
-                </div>
+              <div>
+                <p className="text-gray-500">Jalur</p>
+                <p className="font-semibold text-gray-900 break-words">{trail.nama_jalur}</p>
               </div>
+              <div>
+                <p className="text-gray-500">Tanggal Pendakian</p>
+                <p className="font-semibold text-gray-900">
+                  {hikingDate ? new Date(hikingDate).toLocaleDateString('id-ID', {
+                    day: 'numeric', month: 'short', year: 'numeric'
+                  }) : '-'} 
+                  {' - '}
+                  {hikingReturnDate ? new Date(hikingReturnDate).toLocaleDateString('id-ID', {
+                    day: 'numeric', month: 'short', year: 'numeric'
+                  }) : '-'}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-500">Jumlah Pendaki</p>
+                <p className="font-semibold text-gray-900">{hikerCount} orang</p>
+              </div>
+            </div>
 
-              <button
-                type="submit"
-                disabled={sisaSaatIni !== null && sisaSaatIni < 0}
-                className="w-full min-h-[44px] py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-colors shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-emerald-600 disabled:hover:shadow-lg"
-              >
-                Lanjut ke Logistik
-              </button>
+            <div className="border-t border-gray-200 pt-4 space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-500">Harga per orang</span>
+                <span className="font-medium text-gray-900 break-words">{formatPrice(trail.harga_per_orang)}</span>
+              </div>
+              <div className="flex justify-between items-center pt-2">
+                <span className="text-lg font-bold text-gray-900">Total</span>
+                <span className="text-xl sm:text-2xl font-bold text-emerald-600 break-words">{formatPrice(totalPrice)}</span>
+              </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </form>
   );
