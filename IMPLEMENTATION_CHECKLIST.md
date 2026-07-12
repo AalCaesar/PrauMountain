@@ -261,21 +261,23 @@ Bagian ini berisi daftar tugas dari fitur inti (Core Features) yang diputuskan u
 - [ ] Email thank you + request feedback setelah checkout
 - [ ] Email pembatalan booking
 
+### S.4 Notifikasi Eksternal
+- [ ] Notifikasi WhatsApp untuk booking
 ---
 
 ## Phase 4: Testing & Quality Assurance
 
 ### 4.1 Unit Testing
-- [ ] Test fungsi validasi NIK
-- [ ] Test perhitungan total harga
-- [ ] Test cek kuota tersisa
-- [ ] Test business logic state transitions
+- [x] Test fungsi validasi NIK
+- [x] Test perhitungan total harga
+- [x] Test cek kuota tersisa
+- [x] Test business logic state transitions
 
 ### 4.2 Integration Testing
-- [ ] Test alur booking end-to-end (draft → payment → confirmed)
-- [ ] Test check-in flow
-- [ ] Test check-out flow
-- [ ] Test RLS policies (isolasi data per tenant)
+- [x] Test alur booking end-to-end (draft → payment → confirmed)
+- [x] Test check-in flow
+- [x] Test check-out flow
+- [x] Test RLS policies (isolasi data per tenant)
 
 ### 4.3 Manual Testing
 - [ ] Test seluruh user flow sebagai Super Admin
@@ -344,7 +346,6 @@ Bagian ini berisi daftar tugas dari fitur inti (Core Features) yang diputuskan u
 
 ### Future Enhancements (Post-MVP)
 - [ ] Sistem rating & review untuk basecamp
-- [ ] Notifikasi WhatsApp untuk booking
 - [ ] Integrasi maps untuk lokasi basecamp
 - [ ] Dashboard prediksi cuaca
 - [ ] Loyalty program untuk pendaki
