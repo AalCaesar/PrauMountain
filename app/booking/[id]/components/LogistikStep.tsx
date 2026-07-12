@@ -92,7 +92,7 @@ export default function LogistikStep({ logistics, onChange, onNext, onBack }: Lo
         </div>
 
         {/* Logistics Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {logistikItems.map((item) => {
             const Icon = item.icon;
             const quantity = logistics[item.key];
@@ -100,21 +100,21 @@ export default function LogistikStep({ logistics, onChange, onNext, onBack }: Lo
             return (
               <div
                 key={item.key}
-                className="bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 transition-all shadow-sm p-4 md:p-6"
+                className="bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-md transition-all duration-200 shadow-sm p-4 flex flex-col items-center justify-between h-full text-center"
               >
                 {/* Item Header */}
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="p-3 bg-emerald-50 rounded-xl">
+                <div className="flex flex-col items-center w-full mb-4">
+                  <div className="p-3 bg-emerald-50 rounded-xl mb-3">
                     <Icon className="h-6 w-6 text-emerald-600" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold text-slate-800">{item.name}</h3>
-                    <p className="text-sm text-slate-500 mt-1">{item.description}</p>
-                  </div>
+                  <h3 className="text-sm sm:text-base font-bold text-slate-800 leading-tight">{item.name}</h3>
+                  <p className="text-xs sm:text-sm text-gray-500 mt-1 line-clamp-2 w-full">
+                    {item.description}
+                  </p>
                 </div>
 
                 {/* Quantity Counter */}
-                <div className="flex items-center justify-between bg-slate-50 rounded-xl p-3 mt-auto">
+                <div className="flex items-center justify-between w-full bg-slate-50 border border-slate-100 rounded-xl p-2 sm:p-3 mt-auto">
                   <button
                     type="button"
                     onClick={() => handleQuantityChange(item.key, -1)}
@@ -124,9 +124,9 @@ export default function LogistikStep({ logistics, onChange, onNext, onBack }: Lo
                     <Minus className="h-4 w-4 text-slate-700" />
                   </button>
 
-                  <div className="text-center w-12">
-                    <p className="text-lg font-bold text-slate-800">{quantity}</p>
-                    <p className="text-[10px] text-slate-500 uppercase tracking-wider">unit</p>
+                  <div className="text-center flex-1">
+                    <p className="text-base sm:text-lg font-bold text-slate-800 leading-none">{quantity}</p>
+                    <p className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">unit</p>
                   </div>
 
                   <button
