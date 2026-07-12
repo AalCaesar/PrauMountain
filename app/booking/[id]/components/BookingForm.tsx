@@ -332,6 +332,8 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
     }).format(price);
   };
 
+  const sisaSaatIni = sisaKuota !== null ? sisaKuota - hikerCount : null;
+
   return (
     <form onSubmit={handleSubmit}>
       <Stepper currentStep={currentStep} steps={steps} />
@@ -372,9 +374,9 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
                       <span className="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-500"></span> Mengecek kuota...
                     </p>
                   )}
-                  {!isCheckingQuota && sisaKuota !== null && (
-                    <p className={`text-xs mt-2 font-medium ${sisaKuota === 0 ? 'text-red-500' : sisaKuota <= 10 ? 'text-amber-500' : 'text-emerald-600'}`}>
-                      Sisa kuota: {sisaKuota} orang
+                  {!isCheckingQuota && sisaSaatIni !== null && (
+                    <p className={`text-xs mt-2 font-medium ${sisaSaatIni < 0 ? 'text-red-500' : 'text-emerald-600'}`}>
+                      Sisa kuota: {sisaSaatIni} orang
                     </p>
                   )}
                   {errors.hikingDate && (
@@ -414,25 +416,25 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
                   Jumlah Pendaki
                 </h2>
 
-                <div className="flex items-center gap-4">
+                <div className="inline-flex items-center bg-white border border-slate-200 rounded-xl p-1 shadow-sm">
                   <button
                     type="button"
                     onClick={() => setHikerCount(Math.max(1, hikerCount - 1))}
-                    className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-10 h-10 flex items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-emerald-600 transition-all text-xl font-medium active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={hikerCount <= 1}
                   >
-                    <Minus className="h-4 w-4 text-slate-700" />
+                    <Minus className="h-4 w-4" />
                   </button>
-                  <div className="text-center w-12">
-                    <p className="text-xl font-bold text-slate-800">{hikerCount}</p>
+                  <div className="w-12 text-center text-lg font-bold text-slate-800">
+                    {hikerCount}
                   </div>
                   <button
                     type="button"
                     onClick={() => setHikerCount(hikerCount + 1)}
                     disabled={sisaKuota !== null && hikerCount >= sisaKuota}
-                    className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-10 h-10 flex items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-emerald-600 transition-all text-xl font-medium active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Plus className="h-4 w-4 text-slate-700" />
+                    <Plus className="h-4 w-4" />
                   </button>
                 </div>
                 {errors.hikerCount && (
@@ -597,7 +599,8 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
 
               <button
                 type="submit"
-                className="w-full min-h-[44px] py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-colors shadow-lg hover:shadow-xl"
+                disabled={sisaSaatIni !== null && sisaSaatIni < 0}
+                className="w-full min-h-[44px] py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-colors shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-emerald-600 disabled:hover:shadow-lg"
               >
                 Lanjut ke Logistik
               </button>
