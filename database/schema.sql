@@ -103,7 +103,8 @@ CREATE TABLE public.audit_logs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
   action TEXT NOT NULL,
-  resource TEXT NOT NULL,
+  entity_type TEXT NOT NULL,
+  entity_id UUID,
   basecamp_id UUID REFERENCES public.basecamps(id) ON DELETE SET NULL,
   details JSONB,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL

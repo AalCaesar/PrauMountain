@@ -79,9 +79,9 @@ export async function insertAuditLog({
     const { error } = await supabase.from('audit_logs').insert({
       user_id,
       action,
-      resource: entity_type, // mapping entity_type to resource column
-      basecamp_id,
-      details: { entity_id }
+      entity_type,
+      entity_id,
+      basecamp_id
     });
     
     if (error) {
