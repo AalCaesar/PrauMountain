@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
         const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a5' });
         const pageWidth = pdf.internal.pageSize.getWidth();
         const pageHeight = pdf.internal.pageSize.getHeight();
-        const margin = 15;
+        const margin = 10;
         const contentWidth = pageWidth - (margin * 2);
         let yPos = 0;
 
@@ -107,11 +107,11 @@ export async function POST(request: NextRequest) {
         pdf.rect(0, 0, pageWidth, 35, 'F');
         yPos = 12;
         pdf.setTextColor(255, 255, 255);
-        pdf.setFontSize(18);
+        pdf.setFontSize(16);
         pdf.setFont('helvetica', 'bold');
         pdf.text('E-TICKET PENDAKIAN', pageWidth / 2, yPos, { align: 'center' });
         yPos += 10;
-        pdf.setFontSize(22);
+        pdf.setFontSize(20);
         pdf.text('GUNUNG PRAU', pageWidth / 2, yPos, { align: 'center' });
         yPos += 8;
         pdf.setFontSize(10);

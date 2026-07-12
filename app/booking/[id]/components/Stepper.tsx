@@ -15,7 +15,7 @@ interface StepperProps {
 
 export default function Stepper({ currentStep, steps }: StepperProps) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 md:p-6 mb-6 md:mb-8">
+    <div className="max-w-4xl mx-auto w-full bg-white rounded-2xl border border-gray-200 shadow-sm p-4 md:p-6 mb-6 md:mb-8">
       <div className="flex items-center justify-between relative">
         {steps.map((step, index) => {
           const Icon = step.icon;

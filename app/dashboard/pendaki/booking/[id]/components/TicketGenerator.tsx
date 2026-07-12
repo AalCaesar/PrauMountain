@@ -58,7 +58,7 @@ export default function TicketGenerator({ bookingData, className = '' }: TicketG
       // Dynamic page dimensions (A5: 148mm x 210mm)
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
-      const margin = 15; // Increased margin for A5
+      const margin = 10; // Decreased margin for A5 to prevent clipping
       const contentWidth = pageWidth - (margin * 2);
 
       // ============= DYNAMIC Y POSITIONING =============
@@ -71,12 +71,12 @@ export default function TicketGenerator({ bookingData, className = '' }: TicketG
 
       yPos = 12;
       pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(18); // Larger for A5
+      pdf.setFontSize(16); // Proportional for A5
       pdf.setFont('helvetica', 'bold');
       pdf.text('E-TICKET PENDAKIAN', pageWidth / 2, yPos, { align: 'center' });
 
       yPos += 10;
-      pdf.setFontSize(22); // Larger for A5
+      pdf.setFontSize(20); // Proportional for A5
       pdf.text('GUNUNG PRAU', pageWidth / 2, yPos, { align: 'center' });
 
       yPos += 8;

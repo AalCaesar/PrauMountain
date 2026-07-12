@@ -338,8 +338,8 @@ export default function BookingForm({ trail, basecamp }: BookingFormProps) {
     <form onSubmit={handleSubmit}>
       <Stepper currentStep={currentStep} steps={steps} />
 
-      <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6 lg:gap-8">
-        <div className="lg:col-span-2 order-2 lg:order-1">
+      <div className={currentStep === 1 ? "flex flex-col lg:grid lg:grid-cols-3 gap-6 lg:gap-8" : "max-w-4xl mx-auto w-full"}>
+        <div className={currentStep === 1 ? "lg:col-span-2 order-2 lg:order-1" : "w-full"}>
           {/* Step 1: Data Pendaki */}
           {currentStep === 1 && (
             <div className="space-y-8">
