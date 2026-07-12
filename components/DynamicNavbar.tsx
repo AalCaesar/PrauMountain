@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Mountain, Menu, X, LogIn, UserPlus, LayoutDashboard, LogOut } from 'lucide-react';
 import { getCurrentUser, logout } from '@/app/actions/auth';
 
@@ -12,6 +12,7 @@ export default function DynamicNavbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const pathname = usePathname();
+  const router = useRouter();
 
   const isHomePage = pathname === '/';
   const shouldBeSolid = !isHomePage || isScrolled;
@@ -40,7 +41,7 @@ export default function DynamicNavbar() {
     try {
       await logout();
       setIsLoggedIn(false);
-      window.location.href = '/login';
+      router.push('/login');
     } catch (error) {
       console.error("Gagal logout:", error);
     }

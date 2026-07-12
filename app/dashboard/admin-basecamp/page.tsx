@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { createClient } from '@/utils/supabase/server';
 import { LayoutDashboard, Map, CalendarDays, QrCode } from 'lucide-react';
 import { redirect } from 'next/navigation';
@@ -27,9 +28,6 @@ export default async function AdminBasecampDashboard() {
 
   const displayName = userData?.nama_lengkap || user.email;
 
-  const statsResponse = await getDashboardStats();
-  const stats = statsResponse.success ? statsResponse.data : null;
-
   // Ambil basecamp_id untuk query kuota, emergency, & kpi
   const { data: basecamp } = await supabase
     .from('basecamps')
@@ -37,13 +35,9 @@ export default async function AdminBasecampDashboard() {
     .eq('admin_id', user.id)
     .single();
 
-  let quotaStats = null;
   let overdueHikers: any[] = [];
-  let kpiStats = null;
   if (basecamp) {
-    quotaStats = await getAdminQuotaStats(basecamp.id);
     overdueHikers = await getOverdueHikers(basecamp.id);
-    kpiStats = await getComplianceStats(basecamp.id);
   }
 
   return (
@@ -114,13 +108,23 @@ export default async function AdminBasecampDashboard() {
       </div>
 
       {/* Dashboard Stats Section */}
-      <DashboardStats stats={stats} />
+      <Suspense fallback={<SectionSkeleton />}>
+        <SuspendedDashboardStats />
+      </Suspense>
 
       {/* KPI & SOP Compliance Section */}
-      <SopComplianceChart data={kpiStats} />
+      {basecamp && (
+        <Suspense fallback={<SectionSkeleton />}>
+          <SuspendedSopComplianceChart basecampId={basecamp.id} />
+        </Suspense>
+      )}
 
       {/* Quota Capacity Section */}
-      <QuotaCapacity statsData={quotaStats} />
+      {basecamp && (
+        <Suspense fallback={<SectionSkeleton />}>
+          <SuspendedQuotaCapacity basecampId={basecamp.id} />
+        </Suspense>
+      )}
 
       {/* Info Section */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -129,6 +133,35 @@ export default async function AdminBasecampDashboard() {
           Gunakan menu navigasi di sebelah kiri untuk mengakses fitur yang tersedia.
         </p>
       </div>
+    </div>
+  );
+}
+
+// Wrapper Components untuk Suspense
+async function SuspendedDashboardStats() {
+  const statsResponse = await getDashboardStats();
+  const stats = statsResponse.success ? statsResponse.data : null;
+  return <DashboardStats stats={stats} />;
+}
+
+async function SuspendedQuotaCapacity({ basecampId }: { basecampId: string }) {
+  const quotaStats = await getAdminQuotaStats(basecampId);
+  return <QuotaCapacity statsData={quotaStats} />;
+}
+
+async function SuspendedSopComplianceChart({ basecampId }: { basecampId: string }) {
+  const kpiStats = await getComplianceStats(basecampId);
+  return <SopComplianceChart data={kpiStats} />;
+}
+
+// Skeleton Fallback
+function SectionSkeleton() {
+  return (
+    <div className="w-full h-[300px] bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex items-center justify-center">
+       <div className="animate-pulse flex flex-col items-center gap-4">
+         <div className="h-12 w-12 bg-gray-200 rounded-xl"></div>
+         <div className="h-4 w-32 bg-gray-200 rounded-lg"></div>
+       </div>
     </div>
   );
 }
