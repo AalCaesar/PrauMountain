@@ -8,17 +8,19 @@
 ## 📊 Progress Overview
 
 - **Phase 1**: Setup & Infrastructure - 9/11 tasks (82%)
-- **Phase 2**: Database & Auth - 16/18 tasks (89%)
+- **Phase 2**: Database & Auth - 18/18 tasks (100%)
 - **Phase 3**: Core Features - 68/68 tasks (100%)
 - **Phase 4**: Testing & QA - 0/16 tasks (0%)
 - **Phase 5**: Deployment - 3/14 tasks (21%)
 - **Phase Skipped**: Dilewati Sementara - 0/8 tasks (0%)
 
-**Total Progress (Active Tasks)**: 96/127 tasks (75%)
+**Total Progress (Active Tasks)**: 98/127 tasks (77%)
 
 ✅ **CORE FLOW FULLY WORKING**: Booking creation, payment integration, E-Ticket, email konfirmasi, check-in/check-out dengan checklist detail, dan user dashboard berfungsi end-to-end!
 
 **✅ Recently Completed:**
+- ✅ Dokumentasi SQL Schema di `database/schema.sql`
+- ✅ Optimalisasi Navigasi UI/UX (Skeleton Loading UI, Suspense Streaming, `next/link`)
 - ✅ Cron Job Auto-Expire Booking Unpaid via Vercel
 - ✅ Fitur Cancel Booking (Ditolak/Batal)
 - ✅ Modal Detail Booking Admin + Format Kolom Tabel
@@ -77,10 +79,10 @@
 ### 2.2 Database Constraints & Indexes
 - [x] Setup Foreign Key constraints antar tabel
 - [x] Setup Check constraints (role, status, NIK length, dll)
-- [ ] Buat indexes untuk optimasi query (booking status, tanggal, jalur_id)
-- [ ] Setup triggers untuk `updated_at` timestamps
+- [x] Buat indexes untuk optimasi query (booking status, tanggal, jalur_id)
+- [x] Setup triggers untuk `updated_at` timestamps
 
-**⚠️ CATATAN**: Schema SQL tidak ada di repository. RLS policies tersedia di `supabase_rls_policies.sql` tapi CREATE TABLE statements tidak version-controlled.
+**✅ CATATAN**: Schema SQL `CREATE TABLE` telah didokumentasikan dan di-version-control di `database/schema.sql`, sedangkan RLS policies tersedia di `supabase_rls_policies.sql`.
 
 ### 2.3 Row Level Security (RLS)
 - [x] Enable RLS untuk semua tabel
@@ -318,9 +320,10 @@ Bagian ini berisi daftar tugas dari fitur inti (Core Features) yang diputuskan u
 
 ### Current Blockers
 
-1. **⚠️ INCOMPLETE - Database Schema**: CREATE TABLE statements tidak ada di repository. Hanya RLS policies yang version-controlled di `supabase_rls_policies.sql`.
+(Tidak ada blocker terkait infrastruktur database saat ini)
 
 **✅ FULLY RESOLVED:**
+- ~~Database Schema Documentation~~ - COMPLETE (added `database/schema.sql`)
 - ~~Booking Creation~~ - COMPLETE with full database insertion
 - ~~Payment Gateway~~ - Midtrans Snap fully integrated with webhook auto-confirmation
 - ~~User Dashboard~~ - Complete with list & detail pages
@@ -349,22 +352,24 @@ Bagian ini berisi daftar tugas dari fitur inti (Core Features) yang diputuskan u
 
 ---
 
-**Last Updated**: 2026-07-11  
-**Project Status**: 🟡 In Progress - Core Booking & Payment Working, banyak fitur pending  
-**Current Phase**: Phase 3 - Core Features (54/76 completed - 71%)
+**Last Updated**: 2026-07-12
+**Project Status**: 🟢 In Progress - Core Booking, Payment, UX & Database Working, Testing pending
+**Current Phase**: Phase 4 - Testing & QA (Phase 3 Completed 100%)
 
 ---
 
 ## 🎯 Next Priority Actions
 
-Aplikasi sudah **PRODUCTION READY** untuk core booking & payment! Prioritas berikutnya untuk fitur tambahan:
+Aplikasi sudah **PRODUCTION READY** untuk core booking, UX, & payment! Prioritas berikutnya untuk fitur tambahan & QA:
 
-1. **[MEDIUM]** Setup cron jobs untuk H-1 reminders
-2. **[MEDIUM]** Implement sisa email notifications (welcome, payment link, reminder, thank you, pembatalan)
-3. **[LOW]** Add database schema SQL files ke repository untuk version control
-4. **[LOW]** Eskalasi darurat jika ada pendaki hilang
+1. **[HIGH]** Mulai eksekusi Phase 4: Unit Testing & Integration Testing
+2. **[MEDIUM]** Setup cron jobs untuk H-1 reminders
+3. **[MEDIUM]** Implement sisa email notifications (welcome, payment link, reminder, thank you, pembatalan)
 
 **✅ FULLY COMPLETED:**
+- ~~Optimalisasi UX (Skeleton, Suspense, next/link)~~
+- ~~Add database schema SQL files ke repository untuk version control~~
+- ~~Eskalasi darurat jika ada pendaki hilang~~
 - ~~Booking form database insertion~~
 - ~~Midtrans payment integration with webhook~~
 - ~~User/Pendaki dashboard~~
