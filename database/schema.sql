@@ -104,6 +104,7 @@ CREATE TABLE public.audit_logs (
   user_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
   action TEXT NOT NULL,
   resource TEXT NOT NULL,
+  basecamp_id UUID REFERENCES public.basecamps(id) ON DELETE SET NULL,
   details JSONB,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );

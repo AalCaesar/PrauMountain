@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { createClient } from '@/utils/supabase/server';
 import { LayoutDashboard, Map, CalendarDays, QrCode } from 'lucide-react';
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
 import { getDashboardStats } from './actions';
 import { getAdminQuotaStats } from '@/app/actions/quota';
 import { getOverdueHikers } from '@/app/actions/emergency';
@@ -58,21 +59,21 @@ export default async function AdminBasecampDashboard() {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+        <Link href="/dashboard/admin-basecamp/settings" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow block">
           <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 bg-blue-50 rounded-lg">
+            <div className="p-2 bg-blue-50 rounded-lg shrink-0">
               <LayoutDashboard className="h-6 w-6 text-blue-600" />
             </div>
-            <h3 className="font-semibold text-gray-900">Dashboard</h3>
+            <h3 className="font-semibold text-gray-900">Setting</h3>
           </div>
           <p className="text-sm text-gray-600">
-            Lihat ringkasan operasional basecamp
+            Atur profil dan preferensi basecamp
           </p>
-        </div>
+        </Link>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+        <Link href="/dashboard/admin-basecamp/jalur" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow block">
           <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 bg-emerald-50 rounded-lg">
+            <div className="p-2 bg-emerald-50 rounded-lg shrink-0">
               <Map className="h-6 w-6 text-emerald-600" />
             </div>
             <h3 className="font-semibold text-gray-900">Kelola Jalur</h3>
@@ -80,11 +81,11 @@ export default async function AdminBasecampDashboard() {
           <p className="text-sm text-gray-600">
             Atur jalur pendakian dan kuota
           </p>
-        </div>
+        </Link>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+        <Link href="/dashboard/admin-basecamp/bookings" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow block">
           <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 bg-purple-50 rounded-lg">
+            <div className="p-2 bg-purple-50 rounded-lg shrink-0">
               <CalendarDays className="h-6 w-6 text-purple-600" />
             </div>
             <h3 className="font-semibold text-gray-900">Kelola Booking</h3>
@@ -92,11 +93,11 @@ export default async function AdminBasecampDashboard() {
           <p className="text-sm text-gray-600">
             Monitor dan kelola reservasi pendaki
           </p>
-        </div>
+        </Link>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+        <Link href="/dashboard/admin-basecamp/scanner" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow block">
           <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 bg-amber-50 rounded-lg">
+            <div className="p-2 bg-amber-50 rounded-lg shrink-0">
               <QrCode className="h-6 w-6 text-amber-600" />
             </div>
             <h3 className="font-semibold text-gray-900">Scanner</h3>
@@ -104,7 +105,7 @@ export default async function AdminBasecampDashboard() {
           <p className="text-sm text-gray-600">
             Check-in dan check-out pendaki
           </p>
-        </div>
+        </Link>
       </div>
 
       {/* Dashboard Stats Section */}

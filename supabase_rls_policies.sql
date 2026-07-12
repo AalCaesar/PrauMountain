@@ -392,6 +392,38 @@ WITH CHECK (
 );
 
 -- =====================================================
+-- 9. POLICIES untuk tabel AUDIT_LOGS
+-- =====================================================
+
+-- Aktifkan RLS
+ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
+
+-- Super Admin: Full access
+CREATE POLICY "Super Admin: Full access to audit_logs"
+ON public.audit_logs FOR ALL
+TO authenticated
+USING (is_super_admin())
+WITH CHECK (is_super_admin());
+
+-- Admin Basecamp: Lihat logs di basecamp mereka
+CREATE POLICY "Admin Basecamp: View own basecamp audit logs"
+ON public.audit_logs FOR SELECT
+TO authenticated
+USING (
+  is_admin_basecamp() AND
+  basecamp_id = get_user_basecamp_id()
+);
+
+-- Service Role (Server Actions): Allow insert 
+-- (Note: If server actions use service_role, RLS is bypassed. If they use authenticated user, we need an insert policy)
+CREATE POLICY "Authenticated users: Insert audit logs"
+ON public.audit_logs FOR INSERT
+TO authenticated
+WITH CHECK (
+  auth.uid() = user_id
+);
+
+-- =====================================================
 -- SELESAI! RLS Policies sudah aktif
 -- =====================================================
 --

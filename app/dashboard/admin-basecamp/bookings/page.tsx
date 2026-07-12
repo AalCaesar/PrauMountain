@@ -10,9 +10,9 @@ export default async function BookingsPage() {
   if (!user) {
     return (
       <div className="space-y-6">
-        <div className="flex items-center gap-2">
-          <Calendar className="h-8 w-8 text-gray-600" />
-          <h1 className="text-3xl font-bold text-gray-900">Kelola Booking</h1>
+        <div className="flex flex-row items-start md:items-center gap-3">
+          <Calendar className="h-8 w-8 text-gray-600 shrink-0 mt-1 md:mt-0" />
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">Kelola Booking</h1>
         </div>
 
         <div className="bg-red-50 border border-red-200 rounded-lg p-6">
@@ -38,9 +38,9 @@ export default async function BookingsPage() {
   if (!basecamp) {
     return (
       <div className="space-y-6">
-        <div className="flex items-center gap-2">
-          <Calendar className="h-8 w-8 text-gray-600" />
-          <h1 className="text-3xl font-bold text-gray-900">Kelola Booking</h1>
+        <div className="flex flex-row items-start md:items-center gap-3">
+          <Calendar className="h-8 w-8 text-gray-600 shrink-0 mt-1 md:mt-0" />
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">Kelola Booking</h1>
         </div>
 
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-6">
@@ -66,10 +66,10 @@ export default async function BookingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-2">
-        <Calendar className="h-8 w-8 text-emerald-600" />
+      <div className="flex flex-row items-start md:items-center gap-3">
+        <Calendar className="h-8 w-8 text-emerald-600 shrink-0 mt-1 md:mt-0" />
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Kelola Booking</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">Kelola Booking</h1>
           <p className="text-sm text-gray-600 mt-1">
             {basecamp.nama_basecamp} - {basecamp.nama_gunung}
           </p>

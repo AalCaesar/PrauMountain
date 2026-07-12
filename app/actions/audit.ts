@@ -60,3 +60,34 @@ export async function getRecentAuditLogs(): Promise<AuditLogEntry[]> {
     return [];
   }
 }
+
+export async function insertAuditLog({
+  user_id,
+  action,
+  entity_type,
+  entity_id,
+  basecamp_id
+}: {
+  user_id: string;
+  action: string;
+  entity_type: string;
+  entity_id: string;
+  basecamp_id: string;
+}) {
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.from('audit_logs').insert({
+      user_id,
+      action,
+      resource: entity_type, // mapping entity_type to resource column
+      basecamp_id,
+      details: { entity_id }
+    });
+    
+    if (error) {
+      console.error('Failed to insert audit log:', error);
+    }
+  } catch (error) {
+    console.error('Unexpected error inserting audit log:', error);
+  }
+}

@@ -2,6 +2,7 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
+import { insertAuditLog } from '@/app/actions/audit';
 
 export async function getBookings() {
   try {
@@ -124,6 +125,15 @@ export async function updateBookingStatus(
       return { success: false, error: error.message };
     }
 
+    // Insert Audit Log
+    await insertAuditLog({
+      user_id: user.id,
+      action: `UPDATE_STATUS_${newStatus}`,
+      entity_type: 'bookings',
+      entity_id: bookingId,
+      basecamp_id: (booking as any).jalur_pendakian.basecamp_id
+    });
+
     revalidatePath('/dashboard/admin-basecamp/bookings');
     return { success: true };
   } catch (error) {
@@ -144,7 +154,7 @@ export async function cancelBooking(bookingId: string) {
     // Verify the booking belongs to this admin's basecamp and get current status
     const { data: booking } = await supabase
       .from('bookings')
-      .select('status_booking, jalur_pendakian!inner(basecamps!inner(admin_id))')
+      .select('status_booking, jalur_pendakian!inner(basecamp_id, basecamps!inner(admin_id))')
       .eq('id', bookingId)
       .single();
 
@@ -177,6 +187,15 @@ export async function cancelBooking(bookingId: string) {
       }
       return { success: false, error: error.message };
     }
+
+    // Insert Audit Log
+    await insertAuditLog({
+      user_id: user.id,
+      action: 'CANCEL_BOOKING',
+      entity_type: 'bookings',
+      entity_id: bookingId,
+      basecamp_id: (booking as any).jalur_pendakian.basecamp_id
+    });
 
     revalidatePath('/dashboard/admin-basecamp/bookings');
     return { success: true };

@@ -2,6 +2,7 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
+import { insertAuditLog } from '@/app/actions/audit';
 
 export async function getBookingByCode(kode_booking: string) {
   try {
@@ -164,6 +165,15 @@ export async function processCheckIn(
       return { success: false, error: `Gagal update status booking: ${bookingError.message}` };
     }
 
+    // Insert Audit Log
+    await insertAuditLog({
+      user_id: user.id,
+      action: 'CHECK_IN_BOOKING',
+      entity_type: 'bookings',
+      entity_id: bookingId,
+      basecamp_id: basecamp.id
+    });
+
     revalidatePath('/dashboard/admin-basecamp/scanner');
     revalidatePath('/dashboard/admin-basecamp/bookings');
     return { success: true };
@@ -268,6 +278,15 @@ export async function processCheckOut(
       console.error('Error processing check-out:', bookingError);
       return { success: false, error: `Gagal update status booking: ${bookingError.message}` };
     }
+
+    // Insert Audit Log
+    await insertAuditLog({
+      user_id: user.id,
+      action: 'CHECK_OUT_BOOKING',
+      entity_type: 'bookings',
+      entity_id: bookingId,
+      basecamp_id: basecamp.id
+    });
 
     revalidatePath('/dashboard/admin-basecamp/scanner');
     revalidatePath('/dashboard/admin-basecamp/bookings');
