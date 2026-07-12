@@ -15,6 +15,9 @@ import { getRecentAuditLogs } from '@/app/actions/audit';
 import BasecampComparisonChart from './components/BasecampComparisonChart';
 import AuditTrailTable from './components/AuditTrailTable';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function SuperAdminDashboardPage() {
   const supabase = await createClient();
 
@@ -108,11 +111,15 @@ export default async function SuperAdminDashboardPage() {
         </Link>
       </div>
 
-      {/* Grafik Kinerja Basecamp */}
-      <BasecampComparisonChart data={basecampPerformance} />
-
-      {/* Tabel Audit Trail */}
-      <AuditTrailTable logs={auditLogs} />
+      {/* Grid wrapper untuk Chart dan Audit Trail */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+        <div className="lg:col-span-2">
+          <BasecampComparisonChart data={basecampPerformance} />
+        </div>
+        <div className="lg:col-span-1 max-h-[500px] overflow-y-auto rounded-2xl shadow-sm bg-white">
+          <AuditTrailTable logs={auditLogs} />
+        </div>
+      </div>
 
     </div>
   );
