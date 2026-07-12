@@ -16,11 +16,7 @@ export async function getComplianceStats(basecamp_id: string): Promise<Complianc
     // 1. KPI Sampah (Berdasarkan booking yang CHECKED_OUT)
     const { data: bookingsSampah, error: errorSampah } = await supabase
       .from('bookings')
-      .select(`
-        id,
-        jalur_pendakian!inner(basecamp_id),
-        laporan_sampah(id)
-      `)
+      .select('id, status_booking, jalur_pendakian!inner(basecamp_id), laporan_sampah(id)')
       .eq('status_booking', 'CHECKED_OUT')
       .eq('jalur_pendakian.basecamp_id', basecamp_id);
 
@@ -32,13 +28,14 @@ export async function getComplianceStats(basecamp_id: string): Promise<Complianc
     let patuhSampah = 0;
     let pelanggaranSampah = 0;
 
-    console.log("Debug Data Sampah:", bookingsSampah);
+    console.log('DEBUG BOOKINGS:', JSON.stringify(bookingsSampah, null, 2));
 
     if (bookingsSampah) {
-      bookingsSampah.forEach((b: any) => {
-        if (b.laporan_sampah && Array.isArray(b.laporan_sampah) && b.laporan_sampah.length > 0) {
-          patuhSampah++;
-        } else if (b.laporan_sampah && !Array.isArray(b.laporan_sampah) && Object.keys(b.laporan_sampah).length > 0) {
+      bookingsSampah.forEach((booking: any) => {
+        // Cek apakah laporan_sampah ada, berupa array, dan isinya tidak kosong
+        const adaSampah = booking.laporan_sampah && Array.isArray(booking.laporan_sampah) && booking.laporan_sampah.length > 0;
+        
+        if (adaSampah) {
           patuhSampah++;
         } else {
           pelanggaranSampah++;

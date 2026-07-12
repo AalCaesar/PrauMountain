@@ -30,7 +30,7 @@ export async function getOverdueHikers(basecamp_id: string): Promise<OverdueHike
       ketua_id,
       jalur_pendakian!inner(nama_jalur, basecamp_id),
       anggota_rombongan(nama_anggota, kontak_darurat, nik),
-      users(nama_lengkap, nomor_telepon)
+      users!bookings_ketua_id_fkey(nama_lengkap, nomor_telepon)
     `)
     .eq('status_booking', 'CHECKED_IN')
     .eq('jalur_pendakian.basecamp_id', basecamp_id)
